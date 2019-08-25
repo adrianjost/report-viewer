@@ -15,7 +15,7 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
 	computed: {
-		...mapGetters("user", ["isAuthenticated"])
+		...mapGetters("user", ["isAuthenticated"]),
 	},
 	methods: {
 		...mapActions("user", ["signIn"]),
@@ -24,7 +24,8 @@ export default {
 </script>
 
 <style lang="scss">
-body, #app{
+body,
+#app {
 	min-height: 100vh;
 	width: 100%;
 	margin: 0;

@@ -85,7 +85,7 @@ const uploadFile = async ({
 	filename,
 	file,
 }) => {
-	const filePath = !!directory
+	const filePath = directory
 		? `${org}/${repo}/${branch}/${commit}/${directory}/${filename}`
 		: `${org}/${repo}/${branch}/${commit}/${filename}`;
 	const fileReference = bucket.file(filePath);
@@ -112,7 +112,7 @@ const userIsAuthorized = async (req) => {
 		};
 	}
 	const isTokenValid = await db
-		.collection("auth-tokens")
+		.collection("authTokens")
 		.where("token", "==", req.headers.authorization.slice(7))
 		.where("org", "==", req.params.org)
 		.where("repo", "==", req.params.repo)

@@ -1,4 +1,85 @@
 {
-  "indexes": [],
-  "fieldOverrides": []
+	"indexes": [
+		{
+			"collectionGroup": "branches",
+			"queryScope": "COLLECTION",
+			"fields": [
+				{
+					"fieldPath": "org",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "repo",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "updated_at",
+					"order": "ASCENDING"
+				}
+			]
+		},
+		{
+			"collectionGroup": "commits",
+			"queryScope": "COLLECTION",
+			"fields": [
+				{
+					"fieldPath": "branch",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "org",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "repo",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "updated_at",
+					"order": "ASCENDING"
+				}
+			]
+		},
+		{
+			"collectionGroup": "files",
+			"queryScope": "COLLECTION",
+			"fields": [
+				{
+					"fieldPath": "branch",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "commit",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "org",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "repo",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "updated_at",
+					"order": "ASCENDING"
+				}
+			]
+		},
+		{
+			"collectionGroup": "repos",
+			"queryScope": "COLLECTION",
+			"fields": [
+				{
+					"fieldPath": "org",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "updated_at",
+					"order": "ASCENDING"
+				}
+			]
+		}
+	],
+	"fieldOverrides": []
 }
