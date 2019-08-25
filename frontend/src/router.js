@@ -8,9 +8,25 @@ export default new Router({
 	routes: [
 		{
 			path: "/:org/:repo/:branch/:commit",
-			name: "overview",
+			name: "commit",
 			component: () => import("./pages/_org/_repo/_branch/_commit/index.vue"),
 		},
+		{
+			path: "/:org/:repo/:branch",
+			name: "branch",
+			component: () => import("./pages/_org/_repo/_branch/index.vue"),
+		},
+		{
+			path: "/:org/:repo",
+			name: "repo",
+			component: () => import("./pages/_org/_repo/index.vue"),
+		},
+		{
+			path: "/:org",
+			name: "org",
+			component: () => import("./pages/_org/index.vue"),
+		},
+		{ path: "/", name: "home", component: () => import("./pages/index.vue") },
 		{ path: "*", component: () => import("./pages/404.vue") },
 	],
 });

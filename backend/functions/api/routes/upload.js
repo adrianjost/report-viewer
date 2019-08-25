@@ -7,26 +7,73 @@ const admin = require("firebase-admin");
 const bucket = admin.storage().bucket();
 const db = admin.firestore();
 
-const addFileToDb = async ({ org, repo, branch, commit, filePath }) => {
-	const existingFileId = await db
-		.collection("files")
-		.where("org", "==", org)
-		.where("repo", "==", repo)
-		.where("branch", "==", branch)
-		.where("commit", "==", commit)
-		.where("filePath", "==", filePath)
-		.get()
-		.then((querySnapshot) => {
-			return querySnapshot.docs.length ? querySnapshot.docs[0].id : undefined;
+const updateOrgDb = async ({ org, repo }) => {
+	return db
+		.collection("orgs")
+		.doc(`${org}`)
+		.set({
+			org,
+			repo: admin.firestore.FieldValue.arrayUnion(repo),
+			updated_at: Date.now(),
 		});
-	return existingFileId
-		? db
-				.collection("files")
-				.doc(existingFileId)
-				.set({ timestamp: Date.now() }, { merge: true })
-		: db
-				.collection("files")
-				.add({ org, repo, branch, commit, filePath, timestamp: Date.now() });
+};
+const updateRepoDb = async ({ org, repo, branch }) => {
+	return db
+		.collection("repos")
+		.doc(`${org}_${repo}`)
+		.set({
+			org,
+			repo,
+			branches: admin.firestore.FieldValue.arrayUnion(branch),
+			updated_at: Date.now(),
+		});
+};
+const updateBranchDb = async ({ org, repo, branch, commit }) => {
+	return db
+		.collection("branches")
+		.doc(`${org}_${repo}_${branch}`)
+		.set({
+			org,
+			repo,
+			branch,
+			commits: admin.firestore.FieldValue.arrayUnion(commit),
+			updated_at: Date.now(),
+		});
+};
+const updateCommitDb = async ({ org, repo, branch, commit, path }) => {
+	return db
+		.collection("commits")
+		.doc(`${org}_${repo}_${branch}_${commit}`)
+		.set({
+			org,
+			repo,
+			branch,
+			commit,
+			files: admin.firestore.FieldValue.arrayUnion(path),
+			updated_at: Date.now(),
+		});
+};
+const updateFileDb = async ({ org, repo, branch, commit, path }) => {
+	return db
+		.collection("files")
+		.doc(`${org}_${repo}_${branch}_${commit}`)
+		.set({
+			org,
+			repo,
+			branch,
+			commit,
+			path,
+			updated_at: Date.now(),
+		});
+};
+const addFileToDb = async (params) => {
+	return Promise.all([
+		updateOrgDb(params),
+		updateRepoDb(params),
+		updateBranchDb(params),
+		updateCommitDb(params),
+		updateFileDb(params),
+	]);
 };
 
 const uploadFile = async ({
@@ -52,7 +99,7 @@ const uploadFile = async ({
 		repo,
 		branch,
 		commit,
-		filePath: filePath,
+		path: filePath,
 	});
 	return res;
 };

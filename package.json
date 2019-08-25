@@ -12,7 +12,10 @@
 		"lint": "concurrently \"npm:lint:*\"",
 		"serve:frontend": "cd frontend && npm run serve",
 		"serve:backend": "cd backend && npm run serve",
-		"serve": "concurrently 'npm:serve:*'"
+		"serve": "concurrently 'npm:serve:*'",
+		"deploy:frontend": "cd frontend && npm run deploy",
+		"deploy:backend": "cd backend && npm run deploy",
+		"deploy": "concurrently 'npm:deploy:*'"
 	},
 	"repository": {
 		"type": "git",

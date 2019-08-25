@@ -6,9 +6,6 @@
 			<button class="login" type="button" @click="signIn">
 				Sign in with GitHub
 			</button>
-			<button class="login" type="button" @click="fetchRepos">
-				Fetch Repos
-			</button>
 		</div>
 	</div>
 </template>
@@ -22,7 +19,6 @@ export default {
 	},
 	methods: {
 		...mapActions("user", ["signIn"]),
-		...mapActions("github", ["fetchRepos"]),
 	},
 };
 </script>
@@ -37,7 +33,6 @@ body, #app{
 	font-family: "Avenir", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
 	color: #2c3e50;
 }
 #nav {

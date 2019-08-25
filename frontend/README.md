@@ -1,29 +1,24 @@
-# frontend
+# Report Viewer - Frontend
+## Required API per page
+### /
+- list all active repos
+  - of user
+  - of organization
 
-## Project setup
-```
-yarn install
-```
+### /:orgs
+- list all repos for organization/user
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+### /:orgs/:repo
+- list branches in repo
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+### /:orgs/:repo/settings
+- is user admin of repo?
 
-### Run your tests
-```
-yarn run test
-```
+### /:orgs/:repo/:branch
+- list commits in branch
 
-### Lints and fixes files
-```
-yarn run lint
-```
+### /:orgs/:repo/:branch/:commit
+- list files
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### /:orgs/:repo/:branch/:commit/file
+- (view file)
