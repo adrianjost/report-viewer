@@ -1,35 +1,42 @@
 {
-  "name": "report-viewer",
-  "version": "0.0.1",
-  "description": "post and view your reports",
-  "main": "index.js",
-  "scripts": {
-    "lint:frontend": "cd frontend && npm run lint",
-    "lint:backend": "cd backend && npm run lint",
-    "lint": "concurrently \"npm:lint:*\"",
-    "serve:frontend": "cd frontend && npm run serve",
-    "serve:backend": "cd backend && npm run serve",
-    "serve": "concurrently 'npm:serve:*'"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/adrianjost/report-viewer.git"
-  },
-  "keywords": [
-    "ci",
-    "html",
-    "report",
-    "view",
-    "web",
-    "github"
-  ],
-  "author": "Adrian Jost",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/adrianjost/report-viewer/issues"
-  },
-  "homepage": "https://github.com/adrianjost/report-viewer#readme",
-  "devDependencies": {
-    "concurrently": "^4.1.2"
-  }
+	"name": "report-viewer",
+	"version": "0.0.1",
+	"description": "post and view your reports",
+	"main": "index.js",
+	"scripts": {
+		"setup:frontend": "cd frontend && npm i",
+		"setup:backend": "cd backend && npm i",
+		"setup": "concurrently 'npm:setup:*'",
+		"lint:frontend": "cd frontend && npm run lint",
+		"lint:backend": "cd backend && npm run lint",
+		"lint": "concurrently \"npm:lint:*\"",
+		"serve:frontend": "cd frontend && npm run serve",
+		"serve:backend": "cd backend && npm run serve",
+		"serve": "concurrently 'npm:serve:*'"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/adrianjost/report-viewer.git"
+	},
+	"keywords": [
+		"ci",
+		"html",
+		"report",
+		"view",
+		"web",
+		"github"
+	],
+	"author": "Adrian Jost",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/adrianjost/report-viewer/issues"
+	},
+	"homepage": "https://github.com/adrianjost/report-viewer#readme",
+	"devDependencies": {
+		"concurrently": "^4.1.2",
+		"eslint": "^6.2.2"
+	},
+	"dependencies": {
+		"vue-route-generator": "^0.4.1"
+	}
 }

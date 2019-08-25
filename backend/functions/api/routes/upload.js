@@ -21,12 +21,12 @@ const addFileToDb = async ({ org, repo, branch, commit, filePath }) => {
 		});
 	return existingFileId
 		? db
-			.collection("files")
-			.doc(existingFileId)
-			.set({ timestamp: Date.now() }, { merge: true })
+				.collection("files")
+				.doc(existingFileId)
+				.set({ timestamp: Date.now() }, { merge: true })
 		: db
-			.collection("files")
-			.add({ org, repo, branch, commit, filePath, timestamp: Date.now() });
+				.collection("files")
+				.add({ org, repo, branch, commit, filePath, timestamp: Date.now() });
 };
 
 const uploadFile = async ({
@@ -38,9 +38,12 @@ const uploadFile = async ({
 	filename,
 	file,
 }) => {
-	const filePath = `${org}/${repo}/${branch}/${commit}/${directory}/${filename}`;
+	const filePath = !!directory
+		? `${org}/${repo}/${branch}/${commit}/${directory}/${filename}`
+		: `${org}/${repo}/${branch}/${commit}/${filename}`;
 	const fileReference = bucket.file(filePath);
 	const res = await fileReference.save(new Buffer.from(file.buffer));
+	await fileReference.makePublic();
 	await fileReference.setMetadata({
 		contentType: file.mimetype,
 	});
@@ -83,7 +86,7 @@ const userIsAuthorized = async (req) => {
 };
 
 router.post(
-	"/:org/:repo/:branch/:commit/*",
+	"/:org/:repo/:branch/:commit*",
 	fileParser({
 		rawBodyOptions: {
 			limit: "1mb",
