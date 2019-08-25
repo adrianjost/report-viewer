@@ -18,9 +18,9 @@
 			<span>{{ commit }}</span>
 		</h1>
 		<ul v-if="availableEntrypoints.length > 1">
-			<li v-for="file in availableEntrypoints" :key="file.path">
+			<li v-for="file in availableEntrypoints" :key="file">
 				<button @click="viewFile(file)">
-					{{ file.path }}
+					{{ file }}
 				</button>
 			</li>
 		</ul>
@@ -61,12 +61,12 @@ export default {
 			return this.$route.params.commit;
 		},
 		availableEntrypoints() {
-			return this.currentFiles.filter((file) => file.path.endsWith(".html"));
+			return this.currentFiles.filter((file) => file.endsWith(".html"));
 		},
 		activeEntrypointUrl() {
 			const file = this.activeEntrypoint || this.availableEntrypoints[0];
 			return file
-				? `http://localhost:5000/ci-report-viewer/us-central1/proxy/v1_0/${file.path}`
+				? `${process.env.VUE_APP_FILE_PROXY_URL}/${file}`
 				: "";
 		},
 	},

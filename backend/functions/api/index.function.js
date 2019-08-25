@@ -39,17 +39,22 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-	console.info(`${req.method} ${req.originalUrl}`) 
+	console.info(`${req.method} ${req.originalUrl}`);
 
-	res.on('finish', () => {
-		if(res.statusCode >= 300){
-			console.warn(`${res.statusCode} ${res.statusMessage}; ${res.get('Content-Length') || 0}b sent`)
+	res.on("finish", () => {
+		if (res.statusCode >= 300) {
+			console.warn(
+				`${res.statusCode} ${res.statusMessage}; ${res.get("Content-Length") ||
+					0}b sent`
+			);
 		}
-	})
+	});
 
-	next()
-})
+	next();
+});
 
 app.use("/v1_0", routes);
 
-exports = module.exports = functions.https.onRequest(app);
+exports = module.exports = functions
+	.region("europe-west1")
+	.https.onRequest(app);

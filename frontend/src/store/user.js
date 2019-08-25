@@ -29,6 +29,7 @@ const actions = {
 				commit("github/setToken", result.credential.accessToken, {
 					root: true,
 				});
+				result.user.credential = result.credential;
 				commit("setInfo", result.user);
 			})
 			.catch(function(error) {

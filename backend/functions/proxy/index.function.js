@@ -5,7 +5,8 @@ const functions = require("firebase-functions");
 const app = express();
 
 const FIREBASE_HOST = "https://firebasestorage.googleapis.com";
-const FIREBASE_PREFIX = "/v0/b/ci-report-viewer.appspot.com/o/";
+const FIREBASE_PREFIX = `/v0/b/${process.env.FIREBASE_CONFIG.storageBucket ||
+	"ci-report-viewer.appspot.com"}/o/`;
 
 const storageProxy = proxy({
 	target: FIREBASE_HOST,
@@ -29,4 +30,6 @@ app.use((req, res, next) => {
 
 app.use("/v1_0/*", storageProxy);
 
-exports = module.exports = functions.https.onRequest(app);
+exports = module.exports = functions
+	.region("europe-west1")
+	.https.onRequest(app);

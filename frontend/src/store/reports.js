@@ -1,7 +1,6 @@
 import { db } from "../firebase";
 
 const state = {
-	cache: {},
 	currentFiles: [],
 	currentCommits: [],
 	currentBranches: [],
@@ -38,18 +37,11 @@ const mutations = {
 const actions = {
 	fetchFiles({ commit }, { org, repo, branch, commit: commitSha }) {
 		return db
-			.collection("files")
-			.where("org", "==", org)
-			.where("repo", "==", repo)
-			.where("branch", "==", branch)
-			.where("commit", "==", commitSha)
-			.orderBy("updated_at")
+			.collection("commits")
+			.doc(`${org}_${repo}_${branch}_${commitSha}`)
 			.get()
 			.then((snapshot) => {
-				const files = [];
-				snapshot.forEach((doc) => {
-					files.push(doc.data());
-				});
+				const files = snapshot.data().files;
 				commit("set", ["currentFiles", files]);
 				return files;
 			});

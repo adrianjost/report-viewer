@@ -11,60 +11,59 @@ const updateOrgDb = async ({ org, repo }) => {
 	return db
 		.collection("orgs")
 		.doc(`${org}`)
-		.set({
-			org,
-			repo: admin.firestore.FieldValue.arrayUnion(repo),
-			updated_at: Date.now(),
-		});
+		.set(
+			{
+				org,
+				repo: admin.firestore.FieldValue.arrayUnion(repo),
+				updated_at: Date.now(),
+			},
+			{ merge: true }
+		);
 };
 const updateRepoDb = async ({ org, repo, branch }) => {
 	return db
 		.collection("repos")
 		.doc(`${org}_${repo}`)
-		.set({
-			org,
-			repo,
-			branches: admin.firestore.FieldValue.arrayUnion(branch),
-			updated_at: Date.now(),
-		});
+		.set(
+			{
+				org,
+				repo,
+				branches: admin.firestore.FieldValue.arrayUnion(branch),
+				updated_at: Date.now(),
+			},
+			{ merge: true }
+		);
 };
 const updateBranchDb = async ({ org, repo, branch, commit }) => {
 	return db
 		.collection("branches")
 		.doc(`${org}_${repo}_${branch}`)
-		.set({
-			org,
-			repo,
-			branch,
-			commits: admin.firestore.FieldValue.arrayUnion(commit),
-			updated_at: Date.now(),
-		});
+		.set(
+			{
+				org,
+				repo,
+				branch,
+				commits: admin.firestore.FieldValue.arrayUnion(commit),
+				updated_at: Date.now(),
+			},
+			{ merge: true }
+		);
 };
 const updateCommitDb = async ({ org, repo, branch, commit, path }) => {
 	return db
 		.collection("commits")
 		.doc(`${org}_${repo}_${branch}_${commit}`)
-		.set({
-			org,
-			repo,
-			branch,
-			commit,
-			files: admin.firestore.FieldValue.arrayUnion(path),
-			updated_at: Date.now(),
-		});
-};
-const updateFileDb = async ({ org, repo, branch, commit, path }) => {
-	return db
-		.collection("files")
-		.doc(`${org}_${repo}_${branch}_${commit}`)
-		.set({
-			org,
-			repo,
-			branch,
-			commit,
-			path,
-			updated_at: Date.now(),
-		});
+		.set(
+			{
+				org,
+				repo,
+				branch,
+				commit,
+				files: admin.firestore.FieldValue.arrayUnion(path),
+				updated_at: Date.now(),
+			},
+			{ merge: true }
+		);
 };
 const addFileToDb = async (params) => {
 	return Promise.all([
@@ -72,7 +71,6 @@ const addFileToDb = async (params) => {
 		updateRepoDb(params),
 		updateBranchDb(params),
 		updateCommitDb(params),
-		updateFileDb(params),
 	]);
 };
 
@@ -90,10 +88,10 @@ const uploadFile = async ({
 		: `${org}/${repo}/${branch}/${commit}/${filename}`;
 	const fileReference = bucket.file(filePath);
 	const res = await fileReference.save(new Buffer.from(file.buffer));
-	await fileReference.makePublic();
 	await fileReference.setMetadata({
 		contentType: file.mimetype,
 	});
+	await fileReference.makePublic();
 	await addFileToDb({
 		org,
 		repo,
