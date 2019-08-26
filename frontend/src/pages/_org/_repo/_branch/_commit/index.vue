@@ -65,9 +65,7 @@ export default {
 		},
 		activeEntrypointUrl() {
 			const file = this.activeEntrypoint || this.availableEntrypoints[0];
-			return file
-				? `${process.env.VUE_APP_FILE_PROXY_URL}/${file}`
-				: "";
+			return file ? `${process.env.VUE_APP_FILE_PROXY_URL}/${file}` : "";
 		},
 	},
 	methods: {
