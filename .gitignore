@@ -61,8 +61,12 @@ node_modules/
 # Yarn Integrity file
 .yarn-integrity
 
+# parcel build cache
+.cache
+
 # dotenv environment variables file
 .env*.local
 
 # Build output
 frontend/dist
+package/dist

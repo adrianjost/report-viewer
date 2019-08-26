@@ -1,0 +1,47 @@
+{
+	"name": "report-viewer",
+	"version": "0.1.0",
+	"description": "upload your html reports",
+	"bin": {
+		"uploadreport": "dist/report-viewer.js"
+	},
+	"files": [
+		"dist"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"dev": "parcel watch ./report-viewer.js --target node",
+		"build": "parcel build report-viewer.js --target node"
+	},
+	"keywords": [],
+	"contributors": [
+		{
+			"name": "Adrian Jost",
+			"email": "me@adrianjost.dev",
+			"url": "https://adrianjost.dev"
+		}
+	],
+	"license": "MIT",
+	"repository": "github:adrianjost/report-viewer",
+	"homepage": "https://github.com/adrianjost/report-viewer",
+	"bugs": {
+		"url": "https://github.com/adrianjost/report-viewer/issues"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.5.4",
+		"@babel/preset-env": "^7.5.4",
+		"parcel-bundler": "^1.12.3",
+		"parcel-plugin-shebang": "^1.2.7"
+	},
+	"engines": {
+		"node": ">=8"
+	},
+	"dependencies": {
+		"@babel/polyfill": "^7.4.4",
+		"command-line-args": "^5.1.1",
+		"core-js": "^3.2.1",
+		"glob": "^7.1.4"
+	}
+}
