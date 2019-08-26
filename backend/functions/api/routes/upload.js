@@ -149,7 +149,7 @@ router.post(
 		const repo = req.params.repo;
 		const branch = req.params.branch;
 		const commit = req.params.commit;
-		const directory = req.params[0].replace(/(\/)+$/, "");
+		const directory = req.params[0].replace(/^(\/)+/, "").replace(/(\/)+$/, "");
 
 		// AUTHORIZATION
 		try {

@@ -1,9 +1,9 @@
 {
-	"name": "report-viewer",
-	"version": "0.1.0",
+	"name": "@adrianjost/report-viewer",
+	"version": "0.1.1",
 	"description": "upload your html reports",
 	"bin": {
-		"uploadreport": "dist/report-viewer.js"
+		"rv-upload": "dist/report-viewer.js"
 	},
 	"files": [
 		"dist"
@@ -13,7 +13,8 @@
 	},
 	"scripts": {
 		"dev": "parcel watch ./report-viewer.js --target node",
-		"build": "parcel build report-viewer.js --target node"
+		"build": "parcel build report-viewer.js --target node",
+		"deploy": "npm run build && npm publish"
 	},
 	"keywords": [],
 	"contributors": [
@@ -42,6 +43,7 @@
 		"@babel/polyfill": "^7.4.4",
 		"command-line-args": "^5.1.1",
 		"core-js": "^3.2.1",
-		"glob": "^7.1.4"
+		"glob": "^7.1.4",
+		"request": "^2.88.0"
 	}
 }

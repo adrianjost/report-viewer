@@ -15,6 +15,7 @@
 		"serve": "concurrently 'npm:serve:*'",
 		"deploy:database": "firebase deploy --only firestore",
 		"deploy:storage": "firebase deploy --only storage",
+		"deploy:package": "cd package && npm run deploy",
 		"deploy:frontend": "cd frontend && npm run deploy",
 		"deploy:backend": "cd backend && npm run deploy",
 		"deploy": "concurrently 'npm:deploy:*'"
