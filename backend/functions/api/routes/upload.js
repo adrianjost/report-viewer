@@ -7,63 +7,74 @@ const admin = require("firebase-admin");
 const bucket = admin.storage().bucket();
 const db = admin.firestore();
 
+const patchOrCreate = async ({ collection, fields, doc }) => {
+	const snapshot = await fields
+		.reduce(
+			(ref, field) => ref.where(field, "==", doc[field]),
+			db.collection(collection)
+		)
+		.limit(1)
+		.get();
+	if (snapshot.empty) {
+		return db.collection(collection).add(doc);
+	} else {
+		const docId = snapshot.docs[0].id;
+		return db
+			.collection(collection)
+			.doc(docId)
+			.set(doc, { merge: true });
+	}
+};
+
 const updateOrgDb = async ({ org, repo }) => {
-	return db
-		.collection("orgs")
-		.doc(`${org}`)
-		.set(
-			{
-				org,
-				repo: admin.firestore.FieldValue.arrayUnion(repo),
-				updated_at: Date.now(),
-			},
-			{ merge: true }
-		);
+	return patchOrCreate({
+		collection: "orgs",
+		fields: ["org"],
+		doc: {
+			org,
+			repo: admin.firestore.FieldValue.arrayUnion(repo),
+			updated_at: Date.now(),
+		},
+	});
 };
 const updateRepoDb = async ({ org, repo, branch }) => {
-	return db
-		.collection("repos")
-		.doc(`${org}_${repo}`)
-		.set(
-			{
-				org,
-				repo,
-				branches: admin.firestore.FieldValue.arrayUnion(branch),
-				updated_at: Date.now(),
-			},
-			{ merge: true }
-		);
+	return patchOrCreate({
+		collection: "repos",
+		fields: ["org", "repo"],
+		doc: {
+			org,
+			repo,
+			branches: admin.firestore.FieldValue.arrayUnion(branch),
+			updated_at: Date.now(),
+		},
+	});
 };
 const updateBranchDb = async ({ org, repo, branch, commit }) => {
-	return db
-		.collection("branches")
-		.doc(`${org}_${repo}_${branch}`)
-		.set(
-			{
-				org,
-				repo,
-				branch,
-				commits: admin.firestore.FieldValue.arrayUnion(commit),
-				updated_at: Date.now(),
-			},
-			{ merge: true }
-		);
+	return patchOrCreate({
+		collection: "branches",
+		fields: ["org", "repo", "branch"],
+		doc: {
+			org,
+			repo,
+			branch,
+			commits: admin.firestore.FieldValue.arrayUnion(commit),
+			updated_at: Date.now(),
+		},
+	});
 };
 const updateCommitDb = async ({ org, repo, branch, commit, path }) => {
-	return db
-		.collection("commits")
-		.doc(`${org}_${repo}_${branch}_${commit}`)
-		.set(
-			{
-				org,
-				repo,
-				branch,
-				commit,
-				files: admin.firestore.FieldValue.arrayUnion(path),
-				updated_at: Date.now(),
-			},
-			{ merge: true }
-		);
+	return patchOrCreate({
+		collection: "commits",
+		fields: ["org", "repo", "branch", "commit"],
+		doc: {
+			org,
+			repo,
+			branch,
+			commit,
+			files: admin.firestore.FieldValue.arrayUnion(path),
+			updated_at: Date.now(),
+		},
+	});
 };
 const addFileToDb = async (params) => {
 	return Promise.all([
