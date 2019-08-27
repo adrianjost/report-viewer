@@ -120,7 +120,7 @@ const upload = (file, userOptions = {}) => {
 	const { ORG, REPO, BRANCH, COMMIT } = GET_COMMIT_INFO();
 	const FILE_PATH = file.replace(path.basename(file), "");
 	const UPLOAD_URL = `${UPLOAD_URL_BASE}/${ORG}/${REPO}/${BRANCH}/${COMMIT}/${FILE_PATH}`;
-	const AUTH_TOKEN = userOptions.token || process.env.REVIEW_VIEWER_TOKEN;
+	const AUTH_TOKEN = userOptions.token || process.env.REPORT_VIEWER_TOKEN;
 	if (!AUTH_TOKEN) {
 		console.error("Auth token is missing!");
 		process.exit(1);

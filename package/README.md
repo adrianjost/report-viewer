@@ -15,7 +15,7 @@ Add the following things to your CI:
 
 variable               | descripton
 -----------------------|-------------------------------------------------------------------------------------
-`REVIEW_VIEWER_TOKEN`  | your personal authorization token. You can also pass it using the CLI
+`REPORT_VIEWER_TOKEN`  | your personal authorization token. You can also pass it using the CLI
 `REPORT_VIEWER_ORG`    | Git organization/username e.g. `adrianjost` for `https://github.com/adrianjost`
 `REPORT_VIEWER_REPO`   | Git repo name e.g. `report-viewer` for `https://github.com/adrianjost/report-viewer`
 `REPORT_VIEWER_BRANCH` | Git branch name e.g. `master`
@@ -33,7 +33,7 @@ Feel free to contribute more by creating a pull request or issue.
 name                     | shorthand | required | description
 -------------------------|:---------:|:--------:|---------------------------------------------------------------------------------------------------------
 `--file`                 |   `-F`    |    ✔     | glob pattern for all files that should be uploaded
-`--token`                |   `-T`    |    ❌     | your personal authorization token. You can also pass it as a enviroment variable (`REVIEW_VIEWER_TOKEN`)
+`--token`                |   `-T`    |    ❌     | your personal authorization token. You can also pass it as a enviroment variable (`REPORT_VIEWER_TOKEN`)
 `--ignore`               |   `-I`    |    ❌     | glob pattern for all files matched by the file parameter that should not be uploaded
 `--no-predefined-ignore` |           |    ❌     | if defined, the predefined ignore patterns get ignored
 

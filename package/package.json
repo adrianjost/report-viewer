@@ -1,6 +1,6 @@
 {
 	"name": "@adrianjost/report-viewer",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "upload your html reports",
 	"bin": {
 		"rv-upload": "dist/report-viewer.js"
