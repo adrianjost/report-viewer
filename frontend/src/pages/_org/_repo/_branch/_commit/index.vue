@@ -27,7 +27,7 @@
 		<p v-if="loaderVisible">loading report...</p>
 		<iframe
 			frameborder="0"
-			sandbox
+			sandbox="allow-scripts"
 			:src="activeEntrypointUrl"
 			@load="loaderVisible = false"
 		></iframe>
