@@ -14,17 +14,18 @@ Add the following things to your CI:
 ### Enviroment Variables
 
 variable               | descripton
------------------------|-------------------------------------------------------------------------------------
+-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------
 `REPORT_VIEWER_TOKEN`  | your personal authorization token. You can also pass it using the CLI
 `REPORT_VIEWER_ORG`    | Git organization/username e.g. `adrianjost` for `https://github.com/adrianjost`
 `REPORT_VIEWER_REPO`   | Git repo name e.g. `report-viewer` for `https://github.com/adrianjost/report-viewer`
-`REPORT_VIEWER_BRANCH` | Git branch name e.g. `master`
-`REPORT_VIEWER_COMMIT` | Git commit hash e.g. `35e32b6a00dec02ae7d7c45c6b7106779a124685`
+`REPORT_VIEWER_BRANCH` | Git branch name e.g. `master` for branch builds (only for branch builds)
+`REPORT_VIEWER_PULL`   | Git number of the pull request for pull builds e.g. `59` for [pull 59](https://github.com/adrianjost/Curriculum-Vitae/pull/59)  (only for pull request builds)
+`REPORT_VIEWER_COMMIT` | Git commit hash (sha) e.g. `35e32b6a00dec02ae7d7c45c6b7106779a124685`
 
 **Note**: for the following CI services, you do not need to specify the variables `REPORT_VIEWER_ORG`, `REPORT_VIEWER_ORG`, `REPORT_VIEWER_ORG`, `REPORT_VIEWER_ORG`:
 - [Travis-CI](https://travis-ci.com)
 - [Circle-CI](https://circleci.com)
-- [GitHub Actions](https://github.com/features/actions)
+<!-- - [GitHub Actions](https://github.com/features/actions) -->
 
 Feel free to contribute more by creating a pull request or issue.
 
