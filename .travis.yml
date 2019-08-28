@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - 10
+
+install:
+  - npm i -g firebase-tools
+  - firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
+  - npm ci
+  - npm run setup
+script:
+  - npm run lint
+
+deploy:
+  provider: script
+  script: npm run deploy
+  on:
+    branch: master
+
+cache:
+  directories:
+    - node_modules
+    - backend/node_modules
+    - frontend/node_modules
+    - package/node_modules

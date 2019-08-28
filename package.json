@@ -6,6 +6,7 @@
 	"scripts": {
 		"setup:frontend": "cd frontend && npm i",
 		"setup:backend": "cd backend && npm i",
+		"setup:package": "cd package && npm i",
 		"setup": "concurrently 'npm:setup:*'",
 		"lint:frontend": "cd frontend && npm run lint",
 		"lint:backend": "cd backend && npm run lint",
