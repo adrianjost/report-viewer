@@ -4,7 +4,6 @@ node_js:
 
 install:
   - npm i -g firebase-tools
-  - firebase deploy --token "$FIREBASE_TOKEN" --non-interactive
   - npm ci
   - npm run setup
 script:
