@@ -13,6 +13,13 @@ const getters = {
 	currentFiles(state) {
 		return state.currentFiles;
 	},
+	currentEntrypoints(state) {
+		const entrypoints = state.currentFiles.filter((filepath) => {
+			const ext = filepath.split(".").pop();
+			return ["txt", "html", "htm", "json"].includes(ext);
+		});
+		return entrypoints.length ? entrypoints : state.currentFiles;
+	},
 	currentCommits(state) {
 		return state.currentCommits;
 	},
@@ -39,26 +46,35 @@ const mutations = {
 // TODO implement pagination
 // The response will contain a Link Header with all links to more related pages that should also be fetched
 const actions = {
-	fetchFiles({ commit }, { org, repo, branch, commit: commitSha }) {
-		return db
+	fetchFiles({ commit }, { org, repo, branch, pull, commit: commitSha }) {
+		let baseQuery = db
 			.collection("commits")
 			.where("org", "==", org)
 			.where("repo", "==", repo)
-			.where("branch", "==", branch)
-			.where("commit", "==", commitSha)
-			.get()
-			.then((snapshot) => {
-				const files = snapshot.data().files;
-				commit("set", ["currentFiles", files]);
-				return files;
-			});
+			.where("commit", "==", commitSha);
+		if (pull) {
+			baseQuery = baseQuery.where("pull", "==", pull);
+		} else {
+			baseQuery = baseQuery.where("branch", "==", branch);
+		}
+		return baseQuery.get().then((snapshot) => {
+			const files = snapshot.docs[0].data().files;
+			commit("set", ["currentFiles", files]);
+			return files;
+		});
 	},
-	fetchCommits({ commit }, { org, repo, branch }) {
-		return db
+	fetchCommits({ commit }, { org, repo, branch, pull }) {
+		console.log("fetchCommits", branch, pull);
+		let baseQuery = db
 			.collection("commits")
 			.where("org", "==", org)
-			.where("repo", "==", repo)
-			.where("branch", "==", branch)
+			.where("repo", "==", repo);
+		if (pull) {
+			baseQuery = baseQuery.where("pull", "==", pull);
+		} else {
+			baseQuery = baseQuery.where("branch", "==", branch);
+		}
+		return baseQuery
 			.orderBy("updated_at")
 			.get()
 			.then((snapshot) => {

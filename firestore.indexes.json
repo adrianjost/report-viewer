@@ -41,6 +41,28 @@
 			]
 		},
 		{
+			"collectionGroup": "commits",
+			"queryScope": "COLLECTION",
+			"fields": [
+				{
+					"fieldPath": "org",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "pull",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "repo",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "updated_at",
+					"order": "ASCENDING"
+				}
+			]
+		},
+		{
 			"collectionGroup": "files",
 			"queryScope": "COLLECTION",
 			"fields": [
@@ -52,6 +74,24 @@
 					"fieldPath": "commit",
 					"order": "ASCENDING"
 				},
+				{
+					"fieldPath": "org",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "repo",
+					"order": "ASCENDING"
+				},
+				{
+					"fieldPath": "updated_at",
+					"order": "ASCENDING"
+				}
+			]
+		},
+		{
+			"collectionGroup": "pulls",
+			"queryScope": "COLLECTION",
+			"fields": [
 				{
 					"fieldPath": "org",
 					"order": "ASCENDING"

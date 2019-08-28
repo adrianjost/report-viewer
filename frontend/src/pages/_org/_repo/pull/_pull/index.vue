@@ -1,38 +1,21 @@
 <template>
 	<div>
 		<Breadcrumb :config="breadcrumbConfig" />
-		<h1>Branches & Pulls</h1>
-		<h2>Branches</h2>
+		<h1>Pull {{ this.pull }}</h1>
 		<ol>
-			<li v-for="branch in currentBranches" :key="branch.branch">
+			<li v-for="commit in currentCommits" :key="commit.commit">
 				<router-link
 					:to="{
-						name: 'branch',
+						name: 'pull_commit',
 						params: {
 							org,
 							repo,
-							branch: branch.branch,
+							pull,
+							commit: commit.commit,
 						},
 					}"
 				>
-					{{ branch.branch }}
-				</router-link>
-			</li>
-		</ol>
-		<h2>Pulls</h2>
-		<ol>
-			<li v-for="pull in currentPulls" :key="pull.pull">
-				<router-link
-					:to="{
-						name: 'pull',
-						params: {
-							org,
-							repo,
-							pull: pull.pull,
-						},
-					}"
-				>
-					{{ pull.pull }}
+					{{ commit.commit }}
 				</router-link>
 			</li>
 		</ol>
@@ -45,27 +28,34 @@ import { mapActions, mapGetters } from "vuex";
 export default {
 	components: { Breadcrumb },
 	created() {
-		this.fetchBranches(this.$route.params);
-		this.fetchPulls(this.$route.params);
+		this.fetchCommits(this.$route.params);
 	},
 	computed: {
-		...mapGetters("reports", ["currentBranches", "currentPulls"]),
+		...mapGetters("reports", ["currentCommits"]),
 		org() {
 			return this.$route.params.org;
 		},
 		repo() {
 			return this.$route.params.repo;
 		},
+		pull() {
+			return this.$route.params.pull;
+		},
 		breadcrumbConfig() {
 			return [
 				{ text: "Home", to: { name: "home" } },
 				{ text: this.org, to: { name: "org", params: { org: this.org } } },
-				{ text: this.repo },
+				{
+					text: this.repo,
+					to: { name: "repo", params: { org: this.org, repo: this.repo } },
+				},
+				{ text: "pull" },
+				{ text: this.pull },
 			];
 		},
 	},
 	methods: {
-		...mapActions("reports", ["fetchBranches", "fetchPulls"]),
+		...mapActions("reports", ["fetchCommits"]),
 	},
 };
 </script>

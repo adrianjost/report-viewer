@@ -1,24 +1,12 @@
 <template>
 	<div>
-		<h2>
-			<router-link :to="{ name: 'home' }">Home</router-link>
-			/
-			<router-link :to="{ name: 'org', params: { org } }">{{
-				org
-			}}</router-link>
-			/
-			<router-link :to="{ name: 'repo', params: { org, repo } }">{{
-				repo
-			}}</router-link>
-			/
-			<span>{{ branch }}</span>
-		</h2>
+		<Breadcrumb :config="breadcrumbConfig" />
 		<h1>Branch</h1>
 		<ol>
 			<li v-for="commit in currentCommits" :key="commit.commit">
 				<router-link
 					:to="{
-						name: 'commit',
+						name: 'branch_commit',
 						params: {
 							org,
 							repo,
@@ -35,9 +23,12 @@
 </template>
 
 <script>
+import Breadcrumb from "@/components/Breadcrumb.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
+	components: { Breadcrumb },
+
 	created() {
 		this.fetchCommits(this.$route.params);
 	},
@@ -51,6 +42,20 @@ export default {
 		},
 		branch() {
 			return this.$route.params.branch;
+		},
+		breadcrumbConfig() {
+			return [
+				{ text: "Home", to: { name: "home" } },
+				{ text: this.org, to: { name: "org", params: { org: this.org } } },
+				{
+					text: this.repo,
+					to: { name: "repo", params: { org: this.org, repo: this.repo } },
+				},
+				{ text: "branch" },
+				{
+					text: this.branch,
+				},
+			];
 		},
 	},
 	methods: {

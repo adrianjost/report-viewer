@@ -11,7 +11,6 @@ import path from "path";
 import commandLineArgs from "command-line-args";
 import glob from "glob";
 import request from "request";
-import { DEFAULT_ECDH_CURVE } from "tls";
 
 const optionDefinitions = [
 	{ name: "token", alias: "T", type: String }, // Auth Token

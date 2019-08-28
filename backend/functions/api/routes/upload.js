@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const sha1 = require("sha1");
 
 const { fileParser } = require("express-multipart-file-parser");
 
@@ -14,22 +15,15 @@ const patchOrCreate = async ({ collection, fields, doc }) => {
 		fields.join(","),
 		JSON.stringify(Object.entries(doc))
 	);
-	const snapshot = await fields
-		.reduce(
-			(ref, field) => ref.where(field, "==", doc[field]),
-			db.collection(collection)
-		)
-		.limit(1)
-		.get();
-	if (snapshot.empty || snapshot.size === 0) {
-		return db.collection(collection).add(doc);
-	} else {
-		const docId = snapshot.docs[0].id;
-		return db
-			.collection(collection)
-			.doc(docId)
-			.set(doc, { merge: true });
-	}
+	const identifier = fields.reduce((acc, key) => {
+		acc = `${acc}-${key}_${doc[key]}`;
+		return acc;
+	}, "");
+	const docId = sha1(identifier);
+	return db
+		.collection(collection)
+		.doc(docId)
+		.set(doc, { merge: true });
 };
 
 const updateOrgDb = async ({ org, repo }) => {

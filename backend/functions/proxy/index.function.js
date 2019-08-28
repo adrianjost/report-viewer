@@ -14,8 +14,12 @@ const storageProxy = proxy({
 	pathRewrite: (path, req) => {
 		const resourcePath =
 			FIREBASE_PREFIX + encodeURIComponent(req.params[0]) + "?alt=media";
-		console.log(FIREBASE_HOST + resourcePath);
 		return resourcePath;
+	},
+	onProxyRes: (proxyRes, req, res) => {
+		if (proxyRes.headers["content-type"] === "application/octet-stream") {
+			proxyRes.headers["content-type"] = "text/plain";
+		}
 	},
 });
 
