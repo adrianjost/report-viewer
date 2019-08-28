@@ -38,7 +38,10 @@ const actions = {
 	fetchFiles({ commit }, { org, repo, branch, commit: commitSha }) {
 		return db
 			.collection("commits")
-			.doc(`${org}_${repo}_${branch}_${commitSha}`)
+			.where("org", "==", org)
+			.where("repo", "==", repo)
+			.where("branch", "==", branch)
+			.where("commit", "==", commitSha)
 			.get()
 			.then((snapshot) => {
 				const files = snapshot.data().files;
