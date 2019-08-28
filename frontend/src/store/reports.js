@@ -64,7 +64,6 @@ const actions = {
 		});
 	},
 	fetchCommits({ commit }, { org, repo, branch, pull }) {
-		console.log("fetchCommits", branch, pull);
 		let baseQuery = db
 			.collection("commits")
 			.where("org", "==", org)

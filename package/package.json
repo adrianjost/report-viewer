@@ -14,7 +14,7 @@
 	"scripts": {
 		"serve": "parcel watch ./report-viewer.js --target node",
 		"build": "parcel build report-viewer.js --target node",
-		"deploy": "npm run build && npm publish"
+		"deploy": "npm run build && npm publish || true"
 	},
 	"keywords": [],
 	"contributors": [
