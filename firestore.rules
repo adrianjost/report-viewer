@@ -8,8 +8,8 @@ service cloud.firestore {
       	return resource == null || request.auth.uid == resource.data.userid
       }
       allow read: if isAuthenticated() && belongsToUser();
-      allow write: if isAuthenticated() 
-        && belongsToUser() 
+      allow write: if isAuthenticated()
+        && belongsToUser()
         && request.auth.uid == request.resource.data.userid;
     }
     match /orgs/{id} {
@@ -21,6 +21,10 @@ service cloud.firestore {
       allow write: if false;
     }
     match /branches/{id} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+    match /pulls/{id} {
       allow read: if isAuthenticated();
       allow write: if false;
     }

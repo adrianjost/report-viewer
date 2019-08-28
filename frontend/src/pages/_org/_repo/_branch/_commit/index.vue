@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper">
-		<h1>
+		<h2>
 			<router-link :to="{ name: 'home' }">Home</router-link>
 			/
 			<router-link :to="{ name: 'org', params: { org } }">{{
@@ -16,7 +16,8 @@
 			}}</router-link>
 			/
 			<span>{{ commit }}</span>
-		</h1>
+		</h2>
+		<h1>Commit</h1>
 		<ul v-if="availableEntrypoints.length > 1">
 			<li v-for="file in availableEntrypoints" :key="file">
 				<button @click="viewFile(file)">

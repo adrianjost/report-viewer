@@ -8,6 +8,12 @@ const bucket = admin.storage().bucket();
 const db = admin.firestore();
 
 const patchOrCreate = async ({ collection, fields, doc }) => {
+	console.log(
+		"patchOrCreate",
+		collection,
+		fields.join(","),
+		JSON.stringify(Object.entries(doc))
+	);
 	const snapshot = await fields
 		.reduce(
 			(ref, field) => ref.where(field, "==", doc[field]),
@@ -15,7 +21,7 @@ const patchOrCreate = async ({ collection, fields, doc }) => {
 		)
 		.limit(1)
 		.get();
-	if (snapshot.empty) {
+	if (snapshot.empty || snapshot.size === 0) {
 		return db.collection(collection).add(doc);
 	} else {
 		const docId = snapshot.docs[0].id;
@@ -37,16 +43,21 @@ const updateOrgDb = async ({ org, repo }) => {
 		},
 	});
 };
-const updateRepoDb = async ({ org, repo, branch }) => {
+const updateRepoDb = async ({ org, repo, branch, pull }) => {
+	let doc = {
+		org,
+		repo,
+		updated_at: Date.now(),
+	};
+	if (pull) {
+		doc.pulls = admin.firestore.FieldValue.arrayUnion(pull);
+	} else {
+		doc.branches = admin.firestore.FieldValue.arrayUnion(branch);
+	}
 	return patchOrCreate({
 		collection: "repos",
 		fields: ["org", "repo"],
-		doc: {
-			org,
-			repo,
-			branches: admin.firestore.FieldValue.arrayUnion(branch),
-			updated_at: Date.now(),
-		},
+		doc,
 	});
 };
 const updateBranchDb = async ({ org, repo, branch, commit }) => {
@@ -62,41 +73,67 @@ const updateBranchDb = async ({ org, repo, branch, commit }) => {
 		},
 	});
 };
-const updateCommitDb = async ({ org, repo, branch, commit, path }) => {
+const updatePullDb = async ({ org, repo, pull, commit }) => {
 	return patchOrCreate({
-		collection: "commits",
-		fields: ["org", "repo", "branch", "commit"],
+		collection: "pulls",
+		fields: ["org", "repo", "pull"],
 		doc: {
 			org,
 			repo,
-			branch,
-			commit,
-			files: admin.firestore.FieldValue.arrayUnion(path),
+			pull,
+			commits: admin.firestore.FieldValue.arrayUnion(commit),
 			updated_at: Date.now(),
 		},
 	});
 };
+const updateCommitDb = async ({ org, repo, branch, pull, commit, path }) => {
+	const doc = {
+		org,
+		repo,
+		commit,
+		files: admin.firestore.FieldValue.arrayUnion(path),
+		updated_at: Date.now(),
+	};
+	const uniqueFields = ["org", "repo", "commit"];
+	if (pull) {
+		doc.pull = pull;
+		doc.isPull = true;
+		uniqueFields.push("pull");
+	} else {
+		doc.branch = branch;
+		doc.isPull = false;
+		uniqueFields.push("branch");
+	}
+	return patchOrCreate({
+		collection: "commits",
+		fields: uniqueFields,
+		doc,
+	});
+};
 const addFileToDb = async (params) => {
-	return Promise.all([
-		updateOrgDb(params),
-		updateRepoDb(params),
-		updateBranchDb(params),
-		updateCommitDb(params),
-	]);
+	const updatePromises = [updateOrgDb(params), updateRepoDb(params)];
+	if (params.pull) {
+		updatePromises.push(updatePullDb(params), updateCommitDb(params));
+	} else {
+		updatePromises.push(updateBranchDb(params), updateCommitDb(params));
+	}
+	return Promise.all(updatePromises);
 };
 
 const uploadFile = async ({
 	org,
 	repo,
 	branch,
+	pull,
 	commit,
 	directory,
 	filename,
 	file,
 }) => {
-	const filePath = directory
-		? `${org}/${repo}/${branch}/${commit}/${directory}/${filename}`
-		: `${org}/${repo}/${branch}/${commit}/${filename}`;
+	const userFilePath = directory ? `${directory}/${filename}` : `${filename}`;
+	const filePath = pull
+		? `${org}/${repo}/pull/${pull}/${commit}/${userFilePath}`
+		: `${org}/${repo}/branch/${branch}/${commit}/${userFilePath}`;
 	const fileReference = bucket.file(filePath);
 	const res = await fileReference.save(new Buffer.from(file.buffer));
 	await fileReference.setMetadata({
@@ -107,13 +144,14 @@ const uploadFile = async ({
 		org,
 		repo,
 		branch,
+		pull,
 		commit,
 		path: filePath,
 	});
 	return res;
 };
 
-const userIsAuthorized = async (req) => {
+const userIsAuthorized = async ({ req, org, repo }) => {
 	if (!req.headers.authorization) {
 		return {
 			code: 401,
@@ -123,8 +161,8 @@ const userIsAuthorized = async (req) => {
 	const isTokenValid = await db
 		.collection("authTokens")
 		.where("token", "==", req.headers.authorization.slice(7))
-		.where("org", "==", req.params.org)
-		.where("repo", "==", req.params.repo)
+		.where("org", "==", org)
+		.where("repo", "==", repo)
 		.get()
 		.then((querySnapshot) => {
 			return Boolean(querySnapshot.docs.length);
@@ -142,32 +180,34 @@ const userIsAuthorized = async (req) => {
 };
 
 router.post(
-	"/:org/:repo/:branch/:commit*",
+	"/*",
 	fileParser({
 		rawBodyOptions: {
 			limit: "1mb",
 		},
 		busboyOptions: {
 			limits: {
-				fields: 0,
+				fields: 10,
 				files: 1, // only parse first file
 			},
 		},
 	}),
 	async (req, res) => {
 		// EXTRACT METADATA
-		const org = req.params.org;
-		const repo = req.params.repo;
-		const branch = req.params.branch;
-		const commit = req.params.commit;
+		const org = req.body.org;
+		const repo = req.body.repo;
+		const branch = req.body.branch;
+		const pull = req.body.pull;
+		const commit = req.body.commit;
 		const directory = req.params[0].replace(/^(\/)+/, "").replace(/(\/)+$/, "");
 
 		// AUTHORIZATION
 		try {
-			await userIsAuthorized(req);
-		} catch ({ code, message }) {
-			res.status(code);
-			return res.json(message);
+			await userIsAuthorized({ req, org, repo });
+		} catch (error) {
+			const { code, message } = error;
+			res.status(code || 500);
+			return res.json(message || error);
 		}
 
 		// BLOCK HUGE REQUESTS
@@ -194,6 +234,7 @@ router.post(
 			org,
 			repo,
 			branch,
+			pull,
 			commit,
 			directory,
 			filename: file.originalname,

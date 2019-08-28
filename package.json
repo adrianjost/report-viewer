@@ -13,6 +13,7 @@
 		"lint": "concurrently \"npm:lint:*\"",
 		"serve:frontend": "cd frontend && npm run serve",
 		"serve:backend": "cd backend && npm run serve",
+		"serve:package": "cd package && npm run serve",
 		"serve": "concurrently 'npm:serve:*'",
 		"deploy:database": "firebase deploy --only firestore",
 		"deploy:storage": "firebase deploy --only storage",

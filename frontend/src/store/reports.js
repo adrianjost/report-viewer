@@ -4,6 +4,7 @@ const state = {
 	currentFiles: [],
 	currentCommits: [],
 	currentBranches: [],
+	currentPulls: [],
 	currentRepos: [],
 	currentOrgs: [],
 };
@@ -17,6 +18,9 @@ const getters = {
 	},
 	currentBranches(state) {
 		return state.currentBranches;
+	},
+	currentPulls(state) {
+		return state.currentPulls;
 	},
 	currentRepos(state) {
 		return state.currentRepos;
@@ -80,6 +84,22 @@ const actions = {
 				});
 				commit("set", ["currentBranches", branches]);
 				return branches;
+			});
+	},
+	fetchPulls({ commit }, { org, repo }) {
+		return db
+			.collection("pulls")
+			.where("org", "==", org)
+			.where("repo", "==", repo)
+			.orderBy("updated_at")
+			.get()
+			.then((snapshot) => {
+				const pulls = [];
+				snapshot.forEach((doc) => {
+					pulls.push(doc.data());
+				});
+				commit("set", ["currentPulls", pulls]);
+				return pulls;
 			});
 	},
 	fetchRepos({ commit }, { org }) {

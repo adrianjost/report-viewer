@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1>
+		<h2>
 			<router-link :to="{ name: 'home' }">Home</router-link>
 			/
 			<router-link :to="{ name: 'org', params: { org } }">{{
@@ -12,7 +12,8 @@
 			}}</router-link>
 			/
 			<span>{{ branch }}</span>
-		</h1>
+		</h2>
+		<h1>Branch</h1>
 		<ol>
 			<li v-for="commit in currentCommits" :key="commit.commit">
 				<router-link

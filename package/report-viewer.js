@@ -22,7 +22,7 @@ const optionDefinitions = [
 
 const GET_COMMIT_INFO = () => {
 	const VALIDATE = (info) =>
-		info.ORG && info.REPO && info.BRANCH && info.COMMIT;
+		info.ORG && info.REPO && (info.BRANCH || info.PULL) && info.COMMIT;
 
 	const CIRCLE_CI = () => ({
 		ORG: process.env.CIRCLE_USERNAME,
@@ -43,19 +43,25 @@ const GET_COMMIT_INFO = () => {
 
 	const TRAVIS = () => {
 		const [ORG, REPO] = (process.env.TRAVIS_REPO_SLUG || "/").split("/");
-		return {
+		const vars = {
 			ORG,
 			REPO,
-			BRANCH:
-				process.env.TRAVIS_PULL_REQUEST_BRANCH || process.env.TRAVIS_BRANCH,
+			// BRANCH: process.env.TRAVIS_PULL_REQUEST_BRANCH || process.env.TRAVIS_BRANCH,
 			COMMIT: process.env.TRAVIS_COMMIT,
 		};
+		if (process.env.TRAVIS_PULL_REQUEST) {
+			vars.PULL = process.env.TRAVIS_PULL_REQUEST;
+		} else {
+			vars.BRANCH = process.env.TRAVIS_BRANCH;
+		}
+		return vars;
 	};
 
 	const DEFAULT = {
 		ORG: process.env.REPORT_VIEWER_ORG,
 		REPO: process.env.REPORT_VIEWER_REPO,
 		BRANCH: process.env.REPORT_VIEWER_BRANCH,
+		PULL: process.env.REPORT_VIEWER_PULL,
 		COMMIT: process.env.REPORT_VIEWER_COMMIT,
 	};
 
@@ -117,17 +123,27 @@ const listFiles = (globPattern, options) => {
 };
 
 const upload = (file, userOptions = {}) => {
-	const { ORG, REPO, BRANCH, COMMIT } = GET_COMMIT_INFO();
+	const { ORG, REPO, BRANCH, PULL, COMMIT } = GET_COMMIT_INFO();
 	const FILE_PATH = file.replace(path.basename(file), "");
-	const UPLOAD_URL = `${UPLOAD_URL_BASE}/${ORG}/${REPO}/${BRANCH}/${COMMIT}/${FILE_PATH}`;
+	const UPLOAD_URL = `${UPLOAD_URL_BASE}/${FILE_PATH}`;
 	const AUTH_TOKEN = userOptions.token || process.env.REPORT_VIEWER_TOKEN;
 	if (!AUTH_TOKEN) {
 		console.error("Auth token is missing!");
 		process.exit(1);
 	}
 
-	// console.log(UPLOAD_URL);
-	// return Promise.resolve({ file, message: "uploaded" });
+	const formData = {
+		org: ORG,
+		repo: REPO,
+		commit: COMMIT,
+		file: fs.createReadStream(file),
+	};
+	if (BRANCH) {
+		formData.branch = BRANCH;
+	}
+	if (PULL) {
+		formData.pull = PULL;
+	}
 
 	const options = {
 		method: "POST",
@@ -136,9 +152,7 @@ const upload = (file, userOptions = {}) => {
 			Authorization: `Bearer ${AUTH_TOKEN}`,
 			"Content-Type": "multipart/form-data",
 		},
-		formData: {
-			file: fs.createReadStream(file),
-		},
+		formData,
 	};
 
 	return new Promise((resolve, reject) =>

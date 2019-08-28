@@ -1,10 +1,11 @@
 <template>
 	<div>
-		<h1>
+		<h2>
 			<router-link :to="{ name: 'home' }">Home</router-link>
 			/
 			<span>{{ org }}</span>
-		</h1>
+		</h2>
+		<h1>Repos</h1>
 		<ol>
 			<li v-for="repo in currentRepos" :key="repo.repo">
 				<router-link
