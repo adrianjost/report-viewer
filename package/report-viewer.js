@@ -23,14 +23,28 @@ const GET_COMMIT_INFO = () => {
 	const VALIDATE = (info) =>
 		info.ORG && info.REPO && (info.BRANCH || info.PULL) && info.COMMIT;
 
-	const CIRCLE_CI = () => ({
-		ORG: process.env.CIRCLE_USERNAME,
-		REPO: process.env.CIRCLE_PR_REPONAME,
-		BRANCH: process.env.CIRCLE_BRANCH,
-		COMMIT: process.env.CIRCLE_SHA1,
-	});
+	const CIRCLE_CI = () => {
+		const vars = {
+			ORG: process.env.CIRCLE_USERNAME,
+			REPO: process.env.CIRCLE_PR_REPONAME,
+			// BRANCH: process.env.CIRCLE_BRANCH,
+			COMMIT: process.env.CIRCLE_SHA1,
+		};
+		// TODO what happens if there are multiple URLs?
+		// https://circleci.com/docs/2.0/env-vars/
+		const PULL_URL =
+			process.env.CIRCLE_PULL_REQUEST || process.env.CI_PULL_REQUEST;
+		if (PULL_URL) {
+			vars.PULL = PULL_URL.split("/").pop();
+		} else {
+			vars.BRANCH = process.env.CIRCLE_BRANCH;
+		}
+		return vars;
+	};
 
 	const GITHUB = () => {
+		// TODO: Pull request builds are not supported.
+		// Are they even possible with github actions?
 		const [ORG, REPO] = (process.env.GITHUB_REPOSITORY || "/").split("/");
 		return {
 			ORG,
@@ -48,7 +62,7 @@ const GET_COMMIT_INFO = () => {
 			// BRANCH: process.env.TRAVIS_PULL_REQUEST_BRANCH || process.env.TRAVIS_BRANCH,
 			COMMIT: process.env.TRAVIS_COMMIT,
 		};
-		if (process.env.TRAVIS_PULL_REQUEST) {
+		if (process.env.TRAVIS_PULL_REQUEST !== "false") {
 			vars.PULL = process.env.TRAVIS_PULL_REQUEST;
 		} else {
 			vars.BRANCH = process.env.TRAVIS_BRANCH;
