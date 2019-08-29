@@ -1,7 +1,11 @@
 <template>
 	<nav>
 		<ul class="breadcrumb">
-			<li v-for="part in config" :key="part.text" class="part">
+			<li
+				v-for="(part, index) in config"
+				:key="`${index}-${part.text}`"
+				class="part"
+			>
 				<component :is="getComponent(part)" v-bind="removeText(part)">{{
 					part.text
 				}}</component>
@@ -32,8 +36,12 @@ export default {
 <style lang="scss" scoped>
 .breadcrumb {
 	display: inline-flex;
+	flex-wrap: wrap;
 	padding: 0.5rem;
 	list-style: none;
+	.part {
+		white-space: nowrap;
+	}
 	/* Add a slash symbol (/) before/behind each list item */
 	.part + .part::before {
 		padding: 0.5rem;

@@ -18,7 +18,7 @@ const storageProxy = proxy({
 	},
 	onProxyRes: (proxyRes, req, res) => {
 		if (proxyRes.headers["content-type"] === "application/octet-stream") {
-			proxyRes.headers["content-type"] = "text/plain";
+			proxyRes.headers["content-type"] = "text/plain; charset=utf-8";
 		}
 	},
 });

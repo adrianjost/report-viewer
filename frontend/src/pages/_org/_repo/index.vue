@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<Breadcrumb :config="breadcrumbConfig" />
-		<h1>Branches & Pulls</h1>
 		<h2>Branches</h2>
 		<ol>
 			<li v-for="branch in currentBranches" :key="branch.branch">
@@ -43,6 +42,11 @@
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
+	metaInfo() {
+		return {
+			title: `Branches & Pulls - ${this.repo}`,
+		};
+	},
 	components: { Breadcrumb },
 	created() {
 		this.fetchBranches(this.$route.params);

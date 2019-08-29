@@ -1,11 +1,12 @@
 <template>
-	<iframe
-		frameborder="0"
-		sandbox="allow-scripts"
-		:class="{ loading }"
-		:src="frameSrc"
-		@load="loading = false"
-	></iframe>
+	<div :class="{ loading, letter: true }">
+		<iframe
+			frameborder="0"
+			sandbox="allow-scripts"
+			:src="frameSrc"
+			@load="loading = false"
+		></iframe>
+	</div>
 </template>
 
 <script>
@@ -32,16 +33,49 @@ export default {
 <style lang="scss" scoped>
 iframe {
 	flex: 1;
+	width: 100%;
+}
+.letter {
+	flex: 1;
+	display: flex;
 	width: calc(100% - 6rem);
 	background: #eee;
 	margin: 2rem;
 	padding: 1rem;
-	border: 2px dashed #555;
-	border-radius: 1rem;
 	position: relative;
-	&.loading:before {
+	background: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	&.loading {
 		content: "loading report...";
-		position: absolute;
+	}
+}
+.letter:before,
+.letter:after {
+	content: "";
+	height: 98%;
+	position: absolute;
+	width: 100%;
+	z-index: -1;
+	transition: transform 0.3s ease;
+}
+.letter:before {
+	background: #fafafa;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+	left: -5px;
+	top: 4px;
+	transform: rotate(-2.5deg);
+	@media screen and (min-width: 600px) {
+		transform: rotate(-1.2deg);
+	}
+}
+.letter:after {
+	background: #f6f6f6;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+	right: -3px;
+	top: 1px;
+	transform: rotate(1.4deg);
+	@media screen and (min-width: 600px) {
+		transform: rotate(0.8deg);
 	}
 }
 </style>

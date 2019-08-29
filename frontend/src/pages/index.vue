@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<h1>Home</h1>
 		<ol>
 			<li v-for="org in currentOrgs" :key="org.org">
 				<router-link
@@ -22,6 +21,11 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
+	metaInfo() {
+		return {
+			title: `Home`,
+		};
+	},
 	created() {
 		this.fetchOrgs();
 	},

@@ -14,7 +14,7 @@
 				},
 				{
 					"fieldPath": "updated_at",
-					"order": "ASCENDING"
+					"order": "DESCENDING"
 				}
 			]
 		},
@@ -36,7 +36,7 @@
 				},
 				{
 					"fieldPath": "updated_at",
-					"order": "ASCENDING"
+					"order": "DESCENDING"
 				}
 			]
 		},
@@ -58,7 +58,7 @@
 				},
 				{
 					"fieldPath": "updated_at",
-					"order": "ASCENDING"
+					"order": "DESCENDING"
 				}
 			]
 		},
@@ -84,7 +84,7 @@
 				},
 				{
 					"fieldPath": "updated_at",
-					"order": "ASCENDING"
+					"order": "DESCENDING"
 				}
 			]
 		},
@@ -102,7 +102,7 @@
 				},
 				{
 					"fieldPath": "updated_at",
-					"order": "ASCENDING"
+					"order": "DESCENDING"
 				}
 			]
 		},
@@ -116,7 +116,7 @@
 				},
 				{
 					"fieldPath": "updated_at",
-					"order": "ASCENDING"
+					"order": "DESCENDING"
 				}
 			]
 		}

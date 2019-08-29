@@ -1,0 +1,27 @@
+body {
+	--paragraph-width: 80ch;
+
+	--color-primary: #42b983;
+	--color-accent: #dd0f4d;
+
+	--color-black: #333;
+	--color-gray-dark: #777;
+	--color-gray: #999;
+	--color-gray-light: #ccc;
+	--color-white: #fff;
+
+	--font-light: lighter;
+	--font-normal: normal;
+	--font-bold: bold;
+
+	--radius-sm: 0.25rem;
+	--radius-md: 0.5rem;
+	--radius-lg: 1rem;
+
+	--shadow-sm: 0 0 4px rgba(0, 0, 0, 0.5);
+	--shadow-md: 0 0 8px rgba(0, 0, 0, 0.5);
+	--shadow-lg: 0 0 16px rgba(0, 0, 0, 0.5);
+
+	--border-md: 1px;
+	--border-lg: 2px;
+}

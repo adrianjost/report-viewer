@@ -1,34 +1,26 @@
 <template>
 	<div>
 		<Breadcrumb :config="breadcrumbConfig" />
-		<h1>Branch</h1>
-		<ol>
-			<li v-for="commit in currentCommits" :key="commit.commit">
-				<router-link
-					:to="{
-						name: 'branch_commit',
-						params: {
-							org,
-							repo,
-							branch,
-							commit: commit.commit,
-						},
-					}"
-				>
-					{{ commit.commit }}
-				</router-link>
-			</li>
-		</ol>
+		<CommitList
+			:commits="currentCommits"
+			routeName="branch_commit"
+			:routeParams="{ org, repo, branch }"
+		/>
 	</div>
 </template>
 
 <script>
 import Breadcrumb from "@/components/Breadcrumb.vue";
+import CommitList from "@/components/CommitList.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-	components: { Breadcrumb },
-
+	metaInfo() {
+		return {
+			title: `Commits - ${this.branch}`,
+		};
+	},
+	components: { Breadcrumb, CommitList },
 	created() {
 		this.fetchCommits(this.$route.params);
 	},

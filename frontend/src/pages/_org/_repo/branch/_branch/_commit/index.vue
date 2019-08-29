@@ -1,7 +1,6 @@
 <template>
 	<div class="wrapper">
 		<Breadcrumb :config="breadcrumbConfig" />
-		<h1>Commit</h1>
 		<ul v-if="currentEntrypoints.length > 1">
 			<li v-for="file in currentEntrypoints" :key="file">
 				<button @click="viewFile(file)">
@@ -18,6 +17,11 @@ import Breadcrumb from "@/components/Breadcrumb.vue";
 import UserIFrame from "@/components/UserIFrame.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
+	metaInfo() {
+		return {
+			title: `Commit: ${this.commit}`,
+		};
+	},
 	components: { Breadcrumb, UserIFrame },
 	data() {
 		return {

@@ -1,7 +1,6 @@
 <template>
 	<div>
 		<Breadcrumb :config="breadcrumbConfig" />
-		<h1>Repos</h1>
 		<ol>
 			<li v-for="repo in currentRepos" :key="repo.repo">
 				<router-link
@@ -24,6 +23,11 @@
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
+	metaInfo() {
+		return {
+			title: `Repos - ${this.org}`,
+		};
+	},
 	components: { Breadcrumb },
 	created() {
 		this.fetchRepos(this.$route.params);

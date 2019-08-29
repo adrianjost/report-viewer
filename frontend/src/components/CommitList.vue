@@ -1,0 +1,58 @@
+<template>
+	<ol class="commit-list">
+		<li v-for="commit in commits" :key="commit.id" class="list-item">
+			<router-link
+				:to="{
+					name: routeName,
+					params: getRouteParams(commit),
+				}"
+			>
+				<div class="title">
+					{{ new Date(commit.updated_at).toLocaleString() }}
+				</div>
+				<div class="sub-title">
+					{{ commit.commit }}
+				</div>
+			</router-link>
+		</li>
+	</ol>
+</template>
+
+<script>
+export default {
+	props: {
+		commits: {
+			type: Array,
+			required: true,
+		},
+		routeName: {
+			type: String,
+			required: true,
+		},
+		routeParams: {
+			type: Object,
+			default: () => ({}),
+		},
+	},
+	methods: {
+		getRouteParams(commit) {
+			return { ...this.routeParams, commit: commit.commit };
+		},
+	},
+};
+</script>
+
+<style lang="scss" scoped>
+.commit-list {
+	list-style: none;
+}
+.list-item {
+	padding: 0.5rem;
+	.title {
+		font-weight: var(--font-bold);
+	}
+	.sub-title {
+		color: var(--color-gray);
+	}
+}
+</style>

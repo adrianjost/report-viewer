@@ -3,7 +3,7 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
 	mode: "history",
 	routes: [
 		{
@@ -38,7 +38,13 @@ export default new Router({
 			name: "org",
 			component: () => import("./pages/_org/index.vue"),
 		},
-		{ path: "/", name: "home", component: () => import("./pages/index.vue") },
-		{ path: "*", component: () => import("./pages/404.vue") },
+		{
+			path: "/",
+			name: "home",
+			component: () => import("./pages/index.vue"),
+		},
+		//{ path: "*", component: () => import("./pages/404.vue") },
 	],
 });
+
+export default router;

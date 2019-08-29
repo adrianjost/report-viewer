@@ -43,7 +43,7 @@ const GET_COMMIT_INFO = () => {
 	};
 
 	const GITHUB = () => {
-		// TODO: Pull request builds are not supported.
+		// TODO Pull request builds are not supported.
 		// Are they even possible with github actions?
 		const [ORG, REPO] = (process.env.GITHUB_REPOSITORY || "/").split("/");
 		return {

@@ -1,32 +1,26 @@
 <template>
 	<div>
 		<Breadcrumb :config="breadcrumbConfig" />
-		<h1>Pull {{ this.pull }}</h1>
-		<ol>
-			<li v-for="commit in currentCommits" :key="commit.commit">
-				<router-link
-					:to="{
-						name: 'pull_commit',
-						params: {
-							org,
-							repo,
-							pull,
-							commit: commit.commit,
-						},
-					}"
-				>
-					{{ commit.commit }}
-				</router-link>
-			</li>
-		</ol>
+		<CommitList
+			:commits="currentCommits"
+			routeName="pull_commit"
+			:routeParams="{ org, repo, pull }"
+		/>
 	</div>
 </template>
 
 <script>
 import Breadcrumb from "@/components/Breadcrumb.vue";
+import CommitList from "@/components/CommitList.vue";
+
 import { mapActions, mapGetters } from "vuex";
 export default {
-	components: { Breadcrumb },
+	metaInfo() {
+		return {
+			title: `Commits - #${this.pull}`,
+		};
+	},
+	components: { Breadcrumb, CommitList },
 	created() {
 		this.fetchCommits(this.$route.params);
 	},

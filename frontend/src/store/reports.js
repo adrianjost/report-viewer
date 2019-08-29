@@ -43,6 +43,16 @@ const mutations = {
 	},
 };
 
+const readData = (snapshot) => {
+	const data = [];
+	snapshot.forEach((docSnap) => {
+		const doc = docSnap.data();
+		doc.id = docSnap.id;
+		data.push(doc);
+	});
+	return data;
+};
+
 // TODO implement pagination
 // The response will contain a Link Header with all links to more related pages that should also be fetched
 const actions = {
@@ -57,11 +67,15 @@ const actions = {
 		} else {
 			baseQuery = baseQuery.where("branch", "==", branch);
 		}
-		return baseQuery.get().then((snapshot) => {
-			const files = snapshot.docs[0].data().files;
-			commit("set", ["currentFiles", files]);
-			return files;
-		});
+		return baseQuery
+			.limit(1)
+			.get()
+			.then(readData)
+			.then((commits) => {
+				const files = commits[0].files;
+				commit("set", ["currentFiles", files]);
+				return files;
+			});
 	},
 	fetchCommits({ commit }, { org, repo, branch, pull }) {
 		let baseQuery = db
@@ -74,13 +88,10 @@ const actions = {
 			baseQuery = baseQuery.where("branch", "==", branch);
 		}
 		return baseQuery
-			.orderBy("updated_at")
+			.orderBy("updated_at", "desc")
 			.get()
-			.then((snapshot) => {
-				const commits = [];
-				snapshot.forEach((doc) => {
-					commits.push(doc.data());
-				});
+			.then(readData)
+			.then((commits) => {
 				commit("set", ["currentCommits", commits]);
 				return commits;
 			});
@@ -90,13 +101,10 @@ const actions = {
 			.collection("branches")
 			.where("org", "==", org)
 			.where("repo", "==", repo)
-			.orderBy("updated_at")
+			.orderBy("updated_at", "desc")
 			.get()
-			.then((snapshot) => {
-				const branches = [];
-				snapshot.forEach((doc) => {
-					branches.push(doc.data());
-				});
+			.then(readData)
+			.then((branches) => {
 				commit("set", ["currentBranches", branches]);
 				return branches;
 			});
@@ -106,13 +114,10 @@ const actions = {
 			.collection("pulls")
 			.where("org", "==", org)
 			.where("repo", "==", repo)
-			.orderBy("updated_at")
+			.orderBy("updated_at", "desc")
 			.get()
-			.then((snapshot) => {
-				const pulls = [];
-				snapshot.forEach((doc) => {
-					pulls.push(doc.data());
-				});
+			.then(readData)
+			.then((pulls) => {
 				commit("set", ["currentPulls", pulls]);
 				return pulls;
 			});
@@ -121,13 +126,10 @@ const actions = {
 		return db
 			.collection("repos")
 			.where("org", "==", org)
-			.orderBy("updated_at")
+			.orderBy("updated_at", "desc")
 			.get()
-			.then((snapshot) => {
-				const repos = [];
-				snapshot.forEach((doc) => {
-					repos.push(doc.data());
-				});
+			.then(readData)
+			.then((repos) => {
 				commit("set", ["currentRepos", repos]);
 				return repos;
 			});
@@ -135,13 +137,10 @@ const actions = {
 	fetchOrgs({ commit }) {
 		return db
 			.collection("orgs")
-			.orderBy("updated_at")
+			.orderBy("updated_at", "desc")
 			.get()
-			.then((snapshot) => {
-				const orgs = [];
-				snapshot.forEach((doc) => {
-					orgs.push(doc.data());
-				});
+			.then(readData)
+			.then((orgs) => {
 				commit("set", ["currentOrgs", orgs]);
 				return orgs;
 			});
