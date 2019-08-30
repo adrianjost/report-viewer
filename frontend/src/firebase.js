@@ -3,6 +3,7 @@ import "firebase/firestore";
 import "firebase/auth";
 import "firebase/storage";
 import "firebase/functions";
+import "firebase/performance";
 
 const config = {
 	apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -25,6 +26,7 @@ export const db = firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 export const functions = firebase.functions();
+export const perf = firebase.performance();
 export default firebase;
 
 db.enablePersistence().catch(function(err) {
