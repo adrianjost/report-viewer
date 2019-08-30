@@ -8,7 +8,7 @@ importScripts(
 // Cache First for reports
 workbox.routing.registerRoute(
 	new RegExp(
-		`https://europe-west1-ci-report-viewer.cloudfunctions.net/proxy/v1_0/.*`
+		`https://europe-west1-ci-report-viewer\\.cloudfunctions\\.net/proxy/v1_0/.*`
 	),
 	new workbox.strategies.CacheFirst({ cacheName: "reports" })
 );
