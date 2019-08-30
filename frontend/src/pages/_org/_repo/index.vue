@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<Breadcrumb :config="breadcrumbConfig" />
 		<h2>Branches</h2>
 		<ol>
 			<li v-for="branch in currentBranches" :key="branch.branch">
@@ -39,15 +38,13 @@
 </template>
 
 <script>
-import Breadcrumb from "@/components/Breadcrumb.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
 	metaInfo() {
 		return {
-			title: `Branches & Pulls - ${this.repo}`,
+			title: `Branches & Pulls`,
 		};
 	},
-	components: { Breadcrumb },
 	created() {
 		this.fetchBranches(this.$route.params);
 		this.fetchPulls(this.$route.params);
@@ -59,13 +56,6 @@ export default {
 		},
 		repo() {
 			return this.$route.params.repo;
-		},
-		breadcrumbConfig() {
-			return [
-				{ text: "Home", to: { name: "home" } },
-				{ text: this.org, to: { name: "org", params: { org: this.org } } },
-				{ text: this.repo },
-			];
 		},
 	},
 	methods: {

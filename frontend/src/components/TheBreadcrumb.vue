@@ -1,5 +1,5 @@
 <template>
-	<nav>
+	<nav aria-label="Breadcrumb">
 		<ul class="breadcrumb">
 			<li
 				v-for="(part, index) in config"
@@ -37,10 +37,14 @@ export default {
 .breadcrumb {
 	display: inline-flex;
 	flex-wrap: wrap;
+	margin: 0;
 	padding: 0.5rem;
 	list-style: none;
 	.part {
 		white-space: nowrap;
+		.router-link-exact-active {
+			color: inherit;
+		}
 	}
 	/* Add a slash symbol (/) before/behind each list item */
 	.part + .part::before {

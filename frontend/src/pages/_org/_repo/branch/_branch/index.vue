@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<Breadcrumb :config="breadcrumbConfig" />
 		<CommitList
 			:commits="currentCommits"
 			routeName="branch_commit"
@@ -10,17 +9,16 @@
 </template>
 
 <script>
-import Breadcrumb from "@/components/Breadcrumb.vue";
 import CommitList from "@/components/CommitList.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
 	metaInfo() {
 		return {
-			title: `Commits - ${this.branch}`,
+			title: `Commits`,
 		};
 	},
-	components: { Breadcrumb, CommitList },
+	components: { CommitList },
 	created() {
 		this.fetchCommits(this.$route.params);
 	},
@@ -34,20 +32,6 @@ export default {
 		},
 		branch() {
 			return this.$route.params.branch;
-		},
-		breadcrumbConfig() {
-			return [
-				{ text: "Home", to: { name: "home" } },
-				{ text: this.org, to: { name: "org", params: { org: this.org } } },
-				{
-					text: this.repo,
-					to: { name: "repo", params: { org: this.org, repo: this.repo } },
-				},
-				{ text: "branch" },
-				{
-					text: this.branch,
-				},
-			];
 		},
 	},
 	methods: {

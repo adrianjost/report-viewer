@@ -1,5 +1,9 @@
 @import "./variables.scss";
 
+* {
+	box-sizing: border-box;
+}
+
 body,
 #app {
 	min-height: 100vh;

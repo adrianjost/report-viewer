@@ -1,8 +1,16 @@
 <template>
 	<div class="topbar">
-		<h1 class="title">
-			{{ title }}
-		</h1>
+		<slot name="left">
+			<div class="left">
+				<h1 class="title">
+					<slot name="title">{{ title }}</slot>
+				</h1>
+				<div class="subtitle">
+					<slot name="subtitle">{{ subtitle }}</slot>
+				</div>
+			</div>
+		</slot>
+		<slot name="right"> </slot>
 	</div>
 </template>
 
@@ -13,6 +21,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		subtitle: {
+			type: String,
+			default: "",
+		},
 	},
 };
 </script>
@@ -20,7 +32,13 @@ export default {
 <style lang="scss" scoped>
 .topbar {
 	width: 100%;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-	padding: 0.5rem;
+	box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.12);
+	padding: 0.5rem 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	.title {
+		margin: 0;
+	}
 }
 </style>
