@@ -38,10 +38,9 @@ iframe {
 .letter {
 	flex: 1;
 	display: flex;
-	width: calc(100% - 6rem);
+	width: calc(100% - 2rem);
 	background: #eee;
-	margin: 2rem;
-	padding: 1rem;
+	margin: 2rem 1rem;
 	position: relative;
 	background: #fff;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);

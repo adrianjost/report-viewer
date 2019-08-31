@@ -1,16 +1,17 @@
 <template>
 	<div class="topbar">
-		<slot name="left">
-			<div class="left">
-				<h1 class="title">
-					<slot name="title">{{ title }}</slot>
-				</h1>
-				<div class="subtitle">
-					<slot name="subtitle">{{ subtitle }}</slot>
+		<div class="main">
+			<slot name="left">
+				<div class="left">
+					<h1 class="title">
+						<slot name="title">{{ title }}</slot>
+					</h1>
+					<div class="subtitle"></div>
 				</div>
-			</div>
-		</slot>
-		<slot name="right"> </slot>
+			</slot>
+			<slot name="right"></slot>
+		</div>
+		<slot name="subtitle">{{ subtitle }}</slot>
 	</div>
 </template>
 
@@ -34,9 +35,14 @@ export default {
 	width: 100%;
 	box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.12);
 	padding: 0.5rem 2rem;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	@media screen and (max-width: 600px) {
+		padding: 0.5rem;
+	}
+	.main {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
 	.title {
 		margin: 0;
 	}

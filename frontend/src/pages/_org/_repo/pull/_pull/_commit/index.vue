@@ -65,4 +65,13 @@ export default {
 	width: 100%;
 	min-height: 100vh;
 }
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+button {
+	width: 100%;
+	word-break: break-word;
+}
 </style>

@@ -45,6 +45,8 @@ export default {
 <style lang="scss" scoped>
 .commit-list {
 	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 .list-item {
 	padding: 0.5rem;
@@ -53,6 +55,7 @@ export default {
 	}
 	.sub-title {
 		color: var(--color-gray);
+		font-size: var(--font-sm);
 	}
 }
 </style>
