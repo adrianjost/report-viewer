@@ -3,6 +3,7 @@ const state = {
 	user: undefined,
 	orgs: [],
 	repos: [],
+	repoRights: {},
 };
 
 const getters = {
@@ -23,6 +24,9 @@ const mutations = {
 	},
 	setRepos(state, repos) {
 		state.repos = repos;
+	},
+	setRepoRights(state, { slug, data }) {
+		state.repoRights[slug] = data;
 	},
 };
 
@@ -86,6 +90,30 @@ const actions = {
 		);
 		commit("setRepos", repos);
 		return repos;
+	},
+	async fetchRepoRights({ state, commit }, { slug, forceFetch }) {
+		if (!slug) {
+			console.error("fetchRepoRights - slug is missing");
+			return {};
+		}
+		if (forceFetch !== true && state.repoRights[slug] !== undefined) {
+			return state.repoRights[slug];
+		}
+		const data = await fetch(`https://api.github.com/repos/${slug}`, {
+			headers: { Authorization: `token ${state.token}` },
+		})
+			.then(async (res) => {
+				if (!res.ok) {
+					throw new Error("Request failed", await res.json());
+				}
+				return res.json();
+			})
+			.catch(() => {
+				return { permissions: {} };
+			});
+		const permissions = data.permissions;
+		commit("setRepoRights", { slug, data: permissions });
+		return permissions;
 	},
 };
 

@@ -15,4 +15,10 @@ export default new Vuex.Store({
 		github,
 		reports,
 	},
+	mutations: {
+		// eslint-disable-next-line no-unused-vars
+		reset: ({ state }) => {
+			state = {};
+		},
+	},
 });

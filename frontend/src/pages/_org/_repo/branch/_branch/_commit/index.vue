@@ -1,18 +1,17 @@
 <template>
 	<div class="wrapper">
-		<ul v-if="currentEntrypoints.length > 1">
-			<li v-for="file in currentEntrypoints" :key="file">
-				<button @click="viewFile(file)">
-					{{ file }}
-				</button>
-			</li>
-		</ul>
+		<FileList
+			:files="currentEntrypoints"
+			v-if="currentEntrypoints.length > 1"
+			@fileSelected="viewFile"
+		/>
 		<UserIFrame :path="activeEntrypointUrl" />
 	</div>
 </template>
 
 <script>
 import UserIFrame from "@/components/UserIFrame.vue";
+import FileList from "@/components/FileList.vue";
 import { mapActions, mapGetters } from "vuex";
 export default {
 	metaInfo() {
@@ -20,7 +19,7 @@ export default {
 			title: `Report`,
 		};
 	},
-	components: { UserIFrame },
+	components: { FileList, UserIFrame },
 	data() {
 		return {
 			activeEntrypoint: undefined,

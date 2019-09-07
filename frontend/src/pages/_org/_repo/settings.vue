@@ -1,50 +1,16 @@
 <template>
-	<div>
-		<h2>Branches</h2>
-		<ol>
-			<li v-for="branch in currentBranches" :key="branch.branch">
-				<router-link
-					:to="{
-						name: 'branch',
-						params: {
-							org,
-							repo,
-							branch: branch.branch,
-						},
-					}"
-				>
-					{{ branch.branch }}
-				</router-link>
+	<div v-if="isRepoAdmin">
+		<h2>Tokens</h2>
+		<ul>
+			<li v-for="token in tokens" :key="token.id">
+				{{ token.token }}
+				<button type="button" @click="removeRepoToken(token.id)">Remove</button>
 			</li>
-		</ol>
-		<h2>Pulls</h2>
-		<ol>
-			<li v-for="pull in currentPulls" :key="pull.pull">
-				<router-link
-					:to="{
-						name: 'pull',
-						params: {
-							org,
-							repo,
-							pull: pull.pull,
-						},
-					}"
-				>
-					{{ pull.pull }}
-				</router-link>
-			</li>
-		</ol>
-		<router-link
-			:to="{
-				name: 'repo_settings',
-				params: {
-					org,
-					repo,
-				},
-			}"
-		>
-			<h2 v-if="isRepoAdmin">Settings</h2>
-		</router-link>
+		</ul>
+		<button>Generate new Token</button>
+	</div>
+	<div v-else>
+		Sorry, you don't have the rights to do this.
 	</div>
 </template>
 
@@ -53,7 +19,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
 	metaInfo() {
 		return {
-			title: `Branches & Pulls`,
+			title: `Repo Settings`,
 		};
 	},
 	created() {
@@ -80,9 +46,15 @@ export default {
 		repo() {
 			return this.$route.params.repo;
 		},
+		tokens() {
+			return [{ id: "abc", token: "def" }];
+		},
 	},
 	methods: {
 		...mapActions("reports", ["fetchBranches", "fetchPulls"]),
+		removeRepoToken(token) {
+			console.log("remove token", token);
+		},
 	},
 };
 </script>

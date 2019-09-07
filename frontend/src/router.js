@@ -26,6 +26,11 @@ const routes = [
 		component: () => import("./pages/_org/_repo/pull/_pull/index.vue"),
 	},
 	{
+		path: "/:org/:repo/settings",
+		name: "repo_settings",
+		component: () => import("./pages/_org/_repo/settings.vue"),
+	},
+	{
 		path: "/:org/:repo",
 		name: "repo",
 		component: () => import("./pages/_org/_repo/index.vue"),

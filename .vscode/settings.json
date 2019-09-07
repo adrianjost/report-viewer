@@ -35,5 +35,15 @@
 	// ===
 	// EDITOR SETTINGS
 	// ===
-	"editor.suggest.localityBonus": true
+	"editor.suggest.localityBonus": true,
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+		"**/.firebase": true,
+		"**/.cache": true,
+		"**/node_modules": true
+	}
 }

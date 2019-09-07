@@ -38,8 +38,7 @@ const actions = {
 	},
 	async signOut({ commit }) {
 		auth.signOut().then(() => {
-			commit("github/setToken", undefined, { root: true });
-			commit("setInfo", undefined);
+			commit("reset", undefined, { root: true });
 		});
 	},
 };
