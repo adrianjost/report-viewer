@@ -1,5 +1,7 @@
 # Report Viewer
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/adrianjost/report-viewer.svg)](https://greenkeeper.io/)
+
 ## /backend
 
 The firebase cloud functions, used as a backend for this project.
