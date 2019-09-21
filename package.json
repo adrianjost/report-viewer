@@ -44,7 +44,5 @@
 		"concurrently": "^4.1.2",
 		"eslint": "^6.2.2"
 	},
-	"dependencies": {
-		"vue-route-generator": "^0.4.1"
-	}
+	"dependencies": {}
 }
