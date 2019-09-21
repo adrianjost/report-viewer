@@ -45,7 +45,7 @@ const routes = [
 		name: "home",
 		component: () => import("./pages/index.vue"),
 	},
-	//{ path: "*", name: "default", component: () => import("./pages/404.vue") },
+	// { path: "/*", name: "default", component: () => import("./pages/404.vue") },
 ];
 
 // all routes must have a name

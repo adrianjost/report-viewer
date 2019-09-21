@@ -1,4 +1,66 @@
 import { db } from "../firebase";
+import sha1 from "sha1";
+
+const cache = {};
+
+const getDataFromQuerySnapshot = (snapshot) => {
+	const data = [];
+	snapshot.forEach((docSnap) => {
+		const doc = docSnap.data();
+		doc.id = docSnap.id;
+		data.push(doc);
+	});
+	return data;
+};
+
+const dbCachePathGenerator = (query) => ({
+	get: function(obj, prop) {
+		// use cache on get
+		if (prop === "get") {
+			const hash = sha1(JSON.stringify(query, Object.keys(query).sort()));
+			const cacheResult = cache[hash] || [];
+			return () => {
+				if (cacheResult.length) {
+					return Promise.resolve(cacheResult);
+					/*
+					const lastCachedElement = cacheResult.docs[cacheResult - 1];
+					return obj
+						.startAt(lastCachedElement)
+						.get()
+						.then((snapshot) => {
+							const newDocs = getDataFromQuerySnapshot(snapshot);
+							newDocs.forEach((doc) => {
+								if (cache[hash].every((d) => d.id !== doc.id)) {
+									cache[hash].push(doc);
+								}
+							});
+							return cache[hash];
+						});
+					*/
+				} else {
+					return obj.get().then((snapshot) => {
+						cache[hash] = getDataFromQuerySnapshot(snapshot);
+						return cache[hash];
+					});
+				}
+			};
+		}
+		// only log relevant params
+		if (!["collection", "where", "orderBy", "limit"].includes(prop)) {
+			return obj[prop];
+		}
+		// log query params
+		return (...args) => {
+			if (!Array.isArray(query[prop])) {
+				query[prop] = [];
+			}
+			query[prop].push(args);
+			return new Proxy(obj[prop](...args), dbCachePathGenerator(query));
+		};
+	},
+});
+
+const getCacheDB = () => new Proxy(db(), dbCachePathGenerator({}));
 
 const state = {
 	currentFiles: [],
@@ -43,21 +105,11 @@ const mutations = {
 	},
 };
 
-const readData = (snapshot) => {
-	const data = [];
-	snapshot.forEach((docSnap) => {
-		const doc = docSnap.data();
-		doc.id = docSnap.id;
-		data.push(doc);
-	});
-	return data;
-};
-
 // TODO implement pagination
 // The response will contain a Link Header with all links to more related pages that should also be fetched
 const actions = {
 	fetchFiles({ commit }, { org, repo, branch, pull, commit: commitSha }) {
-		let baseQuery = db
+		let baseQuery = getCacheDB()
 			.collection("commits")
 			.where("org", "==", org)
 			.where("repo", "==", repo)
@@ -70,7 +122,6 @@ const actions = {
 		return baseQuery
 			.limit(1)
 			.get()
-			.then(readData)
 			.then((commits) => {
 				const files = commits[0].files;
 				commit("set", ["currentFiles", files]);
@@ -78,7 +129,7 @@ const actions = {
 			});
 	},
 	fetchCommits({ commit }, { org, repo, branch, pull }) {
-		let baseQuery = db
+		let baseQuery = getCacheDB()
 			.collection("commits")
 			.where("org", "==", org)
 			.where("repo", "==", repo);
@@ -90,56 +141,51 @@ const actions = {
 		return baseQuery
 			.orderBy("updated_at", "desc")
 			.get()
-			.then(readData)
 			.then((commits) => {
 				commit("set", ["currentCommits", commits]);
 				return commits;
 			});
 	},
 	fetchBranches({ commit }, { org, repo }) {
-		return db
+		return getCacheDB()
 			.collection("branches")
 			.where("org", "==", org)
 			.where("repo", "==", repo)
 			.orderBy("updated_at", "desc")
 			.get()
-			.then(readData)
 			.then((branches) => {
 				commit("set", ["currentBranches", branches]);
 				return branches;
 			});
 	},
 	fetchPulls({ commit }, { org, repo }) {
-		return db
+		return getCacheDB()
 			.collection("pulls")
 			.where("org", "==", org)
 			.where("repo", "==", repo)
 			.orderBy("updated_at", "desc")
 			.get()
-			.then(readData)
 			.then((pulls) => {
 				commit("set", ["currentPulls", pulls]);
 				return pulls;
 			});
 	},
 	fetchRepos({ commit }, { org }) {
-		return db
+		return getCacheDB()
 			.collection("repos")
 			.where("org", "==", org)
 			.orderBy("updated_at", "desc")
 			.get()
-			.then(readData)
 			.then((repos) => {
 				commit("set", ["currentRepos", repos]);
 				return repos;
 			});
 	},
 	fetchOrgs({ commit }) {
-		return db
+		return getCacheDB()
 			.collection("orgs")
 			.orderBy("updated_at", "desc")
 			.get()
-			.then(readData)
 			.then((orgs) => {
 				commit("set", ["currentOrgs", orgs]);
 				return orgs;

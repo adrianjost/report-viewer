@@ -22,21 +22,24 @@ try {
 }
 
 export const app = firebase.app();
-export const db = firebase.firestore();
+export const db = () => firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 export const functions = firebase.functions();
 export const perf = firebase.performance();
 export default firebase;
 
-db.enablePersistence().catch(function(err) {
-	if (err.code == "failed-precondition") {
-		// Multiple tabs open, persistence can only be enabled
-		// in one tab at a a time.
-		// ...
-	} else if (err.code == "unimplemented") {
-		// The current browser does not support all of the
-		// features required to enable persistence
-		// ...
-	}
-});
+firebase
+	.firestore()
+	.enablePersistence()
+	.catch(function(err) {
+		if (err.code == "failed-precondition") {
+			// Multiple tabs open, persistence can only be enabled
+			// in one tab at a a time.
+			// ...
+		} else if (err.code == "unimplemented") {
+			// The current browser does not support all of the
+			// features required to enable persistence
+			// ...
+		}
+	});
