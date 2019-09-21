@@ -1,5 +1,15 @@
 <template>
 	<div>
+		<FetchDoc
+			url="/api/123"
+			:options="{
+				method: 'POST',
+				headers: {
+					Authentication: 'String',
+					CORS: 'String',
+				},
+			}"
+		/>
 		<ol>
 			<li v-for="org in currentOrgs" :key="org.org">
 				<router-link
@@ -18,6 +28,7 @@
 </template>
 
 <script>
+import FetchDoc from "@/components/fetchDoc.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -26,6 +37,7 @@ export default {
 			title: `Home`,
 		};
 	},
+	components: { FetchDoc },
 	created() {
 		this.fetchOrgs();
 	},
