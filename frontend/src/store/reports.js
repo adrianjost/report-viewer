@@ -109,6 +109,7 @@ const mutations = {
 // The response will contain a Link Header with all links to more related pages that should also be fetched
 const actions = {
 	fetchFiles({ commit }, { org, repo, branch, pull, commit: commitSha }) {
+		commit("set", ["currentFiles", []]);
 		let baseQuery = getCacheDB()
 			.collection("commits")
 			.where("org", "==", org)
@@ -129,6 +130,7 @@ const actions = {
 			});
 	},
 	fetchCommits({ commit }, { org, repo, branch, pull }) {
+		commit("set", ["currentCommits", []]);
 		let baseQuery = getCacheDB()
 			.collection("commits")
 			.where("org", "==", org)
@@ -147,6 +149,7 @@ const actions = {
 			});
 	},
 	fetchBranches({ commit }, { org, repo }) {
+		commit("set", ["currentBranches", []]);
 		return getCacheDB()
 			.collection("branches")
 			.where("org", "==", org)
@@ -159,6 +162,7 @@ const actions = {
 			});
 	},
 	fetchPulls({ commit }, { org, repo }) {
+		commit("set", ["currentPulls", []]);
 		return getCacheDB()
 			.collection("pulls")
 			.where("org", "==", org)
@@ -171,6 +175,7 @@ const actions = {
 			});
 	},
 	fetchRepos({ commit }, { org }) {
+		commit("set", ["currentRepos", []]);
 		return getCacheDB()
 			.collection("repos")
 			.where("org", "==", org)
@@ -182,6 +187,7 @@ const actions = {
 			});
 	},
 	fetchOrgs({ commit }) {
+		commit("set", ["currentOrgs", []]);
 		return getCacheDB()
 			.collection("orgs")
 			.orderBy("updated_at", "desc")

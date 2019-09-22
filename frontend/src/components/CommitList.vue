@@ -1,5 +1,5 @@
 <template>
-	<ol class="commit-list">
+	<ol class="commit-list" v-if="commits.length">
 		<li v-for="commit in commits" :key="commit.id" class="list-item">
 			<router-link
 				:to="{
@@ -16,10 +16,16 @@
 			</router-link>
 		</li>
 	</ol>
+	<ListPlaceholder v-else />
 </template>
 
 <script>
+import ListPlaceholder from "@/components/ListPlaceholder.vue";
+
 export default {
+	components: {
+		ListPlaceholder,
+	},
 	props: {
 		commits: {
 			type: Array,

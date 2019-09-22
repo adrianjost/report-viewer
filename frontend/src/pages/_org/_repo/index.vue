@@ -1,39 +1,11 @@
 <template>
 	<div>
 		<h2>Branches</h2>
-		<ol>
-			<li v-for="branch in currentBranches" :key="branch.branch">
-				<router-link
-					:to="{
-						name: 'branch',
-						params: {
-							org,
-							repo,
-							branch: branch.branch,
-						},
-					}"
-				>
-					{{ branch.branch }}
-				</router-link>
-			</li>
-		</ol>
+		<ItemList :items="currentBranches" :loading="!currentBranches.length" />
+
 		<h2>Pulls</h2>
-		<ol>
-			<li v-for="pull in currentPulls" :key="pull.pull">
-				<router-link
-					:to="{
-						name: 'pull',
-						params: {
-							org,
-							repo,
-							pull: pull.pull,
-						},
-					}"
-				>
-					{{ pull.pull }}
-				</router-link>
-			</li>
-		</ol>
+		<ItemList :items="currentPulls" :loading="!currentPulls.length" />
+
 		<router-link
 			:to="{
 				name: 'repo_settings',
@@ -49,8 +21,11 @@
 </template>
 
 <script>
+import ItemList from "@/components/ItemList.vue";
+
 import { mapActions, mapGetters } from "vuex";
 export default {
+	components: { ItemList },
 	metaInfo() {
 		return {
 			title: `Branches & Pulls`,
@@ -74,6 +49,34 @@ export default {
 	},
 	computed: {
 		...mapGetters("reports", ["currentBranches", "currentPulls"]),
+		currentBranches() {
+			return this.$store.getters["reports/currentBranches"].map((branch) => ({
+				to: {
+					name: "branch",
+					params: {
+						org: this.org,
+						repo: this.repo,
+						branch: branch.branch,
+					},
+				},
+				title: branch.branch,
+				id: branch.branch,
+			}));
+		},
+		currentPulls() {
+			return this.$store.getters["reports/currentPulls"].map((pull) => ({
+				to: {
+					name: "pull",
+					params: {
+						org: this.org,
+						repo: this.repo,
+						pull: pull.pull,
+					},
+				},
+				title: `#${pull.pull}`,
+				id: pull.pull,
+			}));
+		},
 		org() {
 			return this.$route.params.org;
 		},
