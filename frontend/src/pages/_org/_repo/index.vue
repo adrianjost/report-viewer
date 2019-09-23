@@ -1,31 +1,36 @@
 <template>
 	<div>
-		<h2>Branches</h2>
-		<ItemList :items="currentBranches" :loading="!currentBranches.length" />
-
-		<h2>Pulls</h2>
-		<ItemList :items="currentPulls" :loading="!currentPulls.length" />
-
-		<router-link
-			:to="{
-				name: 'repo_settings',
-				params: {
-					org,
-					repo,
-				},
-			}"
-		>
-			<h2 v-if="isRepoAdmin">Settings</h2>
-		</router-link>
+		<tabs class="tabs-component">
+			<tab name="Branches">
+				<ItemList :items="currentBranches" :loading="!currentBranches.length" />
+			</tab>
+			<tab name="Pulls">
+				<ItemList :items="currentPulls" :loading="!currentPulls.length" />
+			</tab>
+			<tab name="Settings">
+				<router-link
+					:to="{
+						name: 'repo_settings',
+						params: {
+							org,
+							repo,
+						},
+					}"
+				>
+					<h2 v-if="isRepoAdmin">Open here</h2>
+				</router-link>
+			</tab>
+		</tabs>
 	</div>
 </template>
 
 <script>
 import ItemList from "@/components/ItemList.vue";
+import { Tabs, Tab } from "vue-tabs-component";
 
 import { mapActions, mapGetters } from "vuex";
 export default {
-	components: { ItemList },
+	components: { ItemList, Tabs, Tab },
 	metaInfo() {
 		return {
 			title: `Branches & Pulls`,
@@ -90,4 +95,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import "@/styles/tabs";
+</style>

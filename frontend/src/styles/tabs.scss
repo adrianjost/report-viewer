@@ -1,0 +1,57 @@
+/deep/ .tabs-component {
+	.tabs-component-tabs {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		border-bottom: 1px solid var(--color-gray);
+		margin-bottom: 8px;
+		.tabs-component-tab {
+			padding: 8px 16px;
+			padding-bottom: 0;
+
+			&:first-of-type {
+				padding-left: 0;
+			}
+
+			.tabs-component-tab-a {
+				transition: color 0.3s ease;
+				color: var(--color-black);
+				font-weight: var(--font-bold);
+				&:hover,
+				&:focus {
+					outline: none;
+					color: var(--color-accent);
+				}
+			}
+			&:after {
+				transition: background-color 0.3s ease;
+				content: "";
+			}
+			&.is-active {
+				.tabs-component-tab-a {
+					transition: color 0.3s ease;
+					color: var(--color-accent);
+					&:focus {
+						color: var(--color-primary);
+					}
+				}
+				&:after {
+					content: "";
+					display: block;
+					margin-top: 4px;
+					height: 4px;
+					width: 100%;
+					background-color: var(--color-accent);
+					border-top-left-radius: 1em;
+					border-top-right-radius: 1em;
+				}
+				&:focus-within {
+					&:after {
+						background-color: var(--color-primary);
+					}
+				}
+			}
+		}
+	}
+}

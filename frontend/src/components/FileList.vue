@@ -1,18 +1,23 @@
 <template>
-	<ul class="file-list">
-		<li v-for="file in cleanedFiles" :key="file.org">
-			<button
-				@click="fileSelected(file.org)"
-				:class="{ 'file-entry': true, selected: file.org === selectedFile }"
-			>
-				{{ file.clean }}
-			</button>
-		</li>
-	</ul>
+	<div>
+		<tabs
+			class="tabs-component"
+			@changed="tabSelected"
+			:options="{ useUrlFragment: false }"
+		>
+			<tab v-for="file in cleanedFiles" :key="file.org" :name="file.clean" />
+		</tabs>
+	</div>
 </template>
 
 <script>
+import { Tabs, Tab } from "vue-tabs-component";
+
 export default {
+	components: {
+		Tabs,
+		Tab,
+	},
 	props: {
 		files: {
 			type: Array,
@@ -45,8 +50,11 @@ export default {
 		},
 	},
 	methods: {
-		fileSelected(file) {
-			this.selectedFile = file;
+		tabSelected(selectedTab) {
+			const cleanedFile = this.cleanedFiles.find(
+				(file) => file.clean === selectedTab.tab.name
+			);
+			const file = this.files.find((file) => file === cleanedFile.org);
 			this.$emit("fileSelected", file);
 		},
 	},
@@ -54,6 +62,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/tabs";
+
 .file-list {
 	list-style: inside;
 	padding-right: 0;
