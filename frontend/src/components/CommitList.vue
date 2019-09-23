@@ -8,7 +8,10 @@
 				}"
 			>
 				<div class="title">
-					{{ new Date(commit.updated_at).toLocaleString() }}
+					{{ getRelativeTime(commit.updated_at) }} ago
+					<span class="timestamp">
+						{{ new Date(commit.updated_at).toLocaleString() }}
+					</span>
 				</div>
 				<div class="sub-title">
 					{{ commit.commit }}
@@ -20,6 +23,8 @@
 </template>
 
 <script>
+import { formatDistance } from "date-fns";
+
 import ListPlaceholder from "@/components/ListPlaceholder.vue";
 
 export default {
@@ -44,6 +49,9 @@ export default {
 		getRouteParams(commit) {
 			return { ...this.routeParams, commit: commit.commit };
 		},
+		getRelativeTime(timestamp) {
+			return formatDistance(new Date(timestamp), new Date());
+		},
 	},
 };
 </script>
@@ -58,10 +66,23 @@ export default {
 	padding: 0.5rem;
 	.title {
 		font-weight: var(--font-bold);
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		.timestamp {
+			color: var(--color-gray-dark);
+			font-weight: var(--font-light);
+		}
+		> * {
+			white-space: nowrap;
+		}
 	}
 	.sub-title {
 		color: var(--color-gray);
 		font-size: var(--font-sm);
+	}
+	&:nth-of-type(2n) {
+		background-color: #eee;
 	}
 }
 </style>

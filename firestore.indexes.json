@@ -35,7 +35,7 @@
 					"order": "ASCENDING"
 				},
 				{
-					"fieldPath": "updated_at",
+					"fieldPath": "created_at",
 					"order": "DESCENDING"
 				}
 			]
@@ -57,7 +57,7 @@
 					"order": "ASCENDING"
 				},
 				{
-					"fieldPath": "updated_at",
+					"fieldPath": "created_at",
 					"order": "DESCENDING"
 				}
 			]
