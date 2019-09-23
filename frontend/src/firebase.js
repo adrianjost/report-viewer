@@ -26,7 +26,10 @@ export const db = () => firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 export const functions = firebase.functions();
-export const perf = firebase.performance();
+export const perf =
+	process.env.NODE_ENV === "production"
+		? firebase.performance()
+		: firebase.performance;
 export default firebase;
 
 firebase
