@@ -15,16 +15,19 @@ install:
 script:
   - npm run lint
 
-after_script:
-  - npm i -g @adrianjost/report-viewer
-  - rv-upload -F **/README.md
-  - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+after_success:
+  - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > package/.npmrc
+
 deploy:
   skip_cleanup: true
   provider: script
   script: npm run deploy
   on:
     branch: master
+
+after_script:
+  - npm i -g @adrianjost/report-viewer
+  - rv-upload -F **/README.md
 
 cache:
   directories:
