@@ -4,6 +4,7 @@
 
 <script>
 import ItemList from "@/components/ItemList.vue";
+import { formatDistance } from "date-fns";
 
 import { mapActions } from "vuex";
 
@@ -29,12 +30,16 @@ export default {
 					},
 				},
 				title: org.org,
+				subtitle: `${this.getRelativeTime(org.updated_at)} ago updated`,
 				id: org.org,
 			}));
 		},
 	},
 	methods: {
 		...mapActions("reports", ["fetchOrgs"]),
+		getRelativeTime(timestamp) {
+			return formatDistance(new Date(timestamp), new Date());
+		},
 	},
 };
 </script>

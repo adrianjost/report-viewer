@@ -4,6 +4,7 @@
 
 <script>
 import ItemList from "@/components/ItemList.vue";
+import { formatDistance } from "date-fns";
 
 import { mapActions } from "vuex";
 export default {
@@ -32,12 +33,16 @@ export default {
 					},
 				},
 				title: repo.repo,
+				subtitle: `${this.getRelativeTime(repo.updated_at)} ago updated`,
 				id: repo.repo,
 			}));
 		},
 	},
 	methods: {
 		...mapActions("reports", ["fetchRepos"]),
+		getRelativeTime(timestamp) {
+			return formatDistance(new Date(timestamp), new Date());
+		},
 	},
 };
 </script>

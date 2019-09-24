@@ -27,6 +27,7 @@
 <script>
 import ItemList from "@/components/ItemList.vue";
 import { Tabs, Tab } from "vue-tabs-component";
+import { formatDistance } from "date-fns";
 
 import { mapActions, mapGetters } from "vuex";
 export default {
@@ -65,6 +66,7 @@ export default {
 					},
 				},
 				title: branch.branch,
+				subtitle: `${this.getRelativeTime(branch.updated_at)} ago updated`,
 				id: branch.branch,
 			}));
 		},
@@ -79,6 +81,7 @@ export default {
 					},
 				},
 				title: `#${pull.pull}`,
+				subtitle: `${this.getRelativeTime(pull.updated_at)} ago updated`,
 				id: pull.pull,
 			}));
 		},
@@ -91,6 +94,9 @@ export default {
 	},
 	methods: {
 		...mapActions("reports", ["fetchBranches", "fetchPulls"]),
+		getRelativeTime(timestamp) {
+			return formatDistance(new Date(timestamp), new Date());
+		},
 	},
 };
 </script>
