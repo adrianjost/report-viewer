@@ -204,6 +204,15 @@ const main = async () => {
 			console.log("-", fileUpload.reason.file, fileUpload.reason.message);
 		}
 	});
+	const successfullUploads = uploads.filter(
+		(fileUpload) => fileUpload.status === "fulfilled"
+	);
+	const commitUrl = `https://ci-report-viewer.web.app/${ORG}/${REPO}/${
+		PULL ? PULL : BRANCH
+	}/${COMMIT}`;
+	console.log(
+		`View ${successfullUploads.length} uploaded file(s) at: ${commitUrl}`
+	);
 };
 
 main();
