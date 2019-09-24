@@ -210,7 +210,7 @@ const main = async () => {
 
 	const { ORG, REPO, BRANCH, PULL, COMMIT } = GET_COMMIT_INFO();
 	const commitUrl = `https://ci-report-viewer.web.app/${ORG}/${REPO}/${
-		PULL ? PULL : BRANCH
+		PULL ? `pull/${PULL}` : `branch/${BRANCH}`
 	}/${COMMIT}`;
 	console.log(
 		`View ${successfullUploads.length} uploaded file(s) at: ${commitUrl}`
