@@ -6,6 +6,7 @@
 		display: flex;
 		border-bottom: 1px solid var(--color-gray);
 		margin-bottom: 8px;
+		overflow-x: auto;
 		.tabs-component-tab {
 			padding: 8px 16px;
 			padding-bottom: 0;
