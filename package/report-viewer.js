@@ -207,6 +207,8 @@ const main = async () => {
 	const successfullUploads = uploads.filter(
 		(fileUpload) => fileUpload.status === "fulfilled"
 	);
+
+	const { ORG, REPO, BRANCH, PULL, COMMIT } = GET_COMMIT_INFO();
 	const commitUrl = `https://ci-report-viewer.web.app/${ORG}/${REPO}/${
 		PULL ? PULL : BRANCH
 	}/${COMMIT}`;
