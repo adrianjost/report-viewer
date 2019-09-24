@@ -1,4 +1,5 @@
 import firebase, { auth } from "../firebase";
+import { configureScope } from "@sentry/browser";
 
 const state = {
 	info: undefined,
@@ -16,6 +17,9 @@ const getters = {
 const mutations = {
 	setInfo(state, user) {
 		state.info = user;
+		configureScope((scope) => {
+			scope.setUser({ uid: user.uid });
+		});
 	},
 };
 

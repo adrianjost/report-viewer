@@ -17,8 +17,11 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		// eslint-disable-next-line no-unused-vars
-		reset: ({ state }) => {
-			state = {};
+		reset: (state) => {
+			Object.keys(state).forEach((module) => {
+				Vue.set(state, module, {});
+			});
+			localStorage.clear();
 		},
 	},
 });

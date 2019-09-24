@@ -76,26 +76,26 @@ const getters = {
 		return state.currentFiles;
 	},
 	currentEntrypoints(state) {
-		const entrypoints = state.currentFiles.filter((filepath) => {
+		const entrypoints = (state.currentFiles || []).filter((filepath) => {
 			const ext = filepath.split(".").pop();
 			return ["txt", "html", "htm", "json"].includes(ext);
 		});
 		return entrypoints.length ? entrypoints : state.currentFiles;
 	},
 	currentCommits(state) {
-		return state.currentCommits;
+		return state.currentCommits || [];
 	},
 	currentBranches(state) {
-		return state.currentBranches;
+		return state.currentBranches || [];
 	},
 	currentPulls(state) {
-		return state.currentPulls;
+		return state.currentPulls || [];
 	},
 	currentRepos(state) {
-		return state.currentRepos;
+		return state.currentRepos || [];
 	},
 	currentOrgs(state) {
-		return state.currentOrgs;
+		return state.currentOrgs || [];
 	},
 };
 
