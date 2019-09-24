@@ -5,6 +5,7 @@
 	"bin": {
 		"rv-upload": "dist/report-viewer.js"
 	},
+	"main": "dist/report-viewer.js",
 	"files": [
 		"dist"
 	],
