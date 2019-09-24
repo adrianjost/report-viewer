@@ -1,6 +1,7 @@
 <template>
 	<div :class="{ loading, letter: true }">
-		<iframe v-show="!loading"
+		<iframe
+			v-show="!loading"
 			frameborder="0"
 			sandbox="allow-scripts"
 			:src="frameSrc"
@@ -23,9 +24,9 @@ export default {
 		};
 	},
 	watch: {
-		path(){
-			this.loading = true
-		}
+		path() {
+			this.loading = true;
+		},
 	},
 	computed: {
 		frameSrc() {
@@ -53,8 +54,8 @@ iframe {
 		content: "";
 		background-image: url("../assets/loading.svg");
 		background-size: contain;
-    background-repeat: repeat-y;
-    background-position: top center;
+		background-repeat: repeat-y;
+		background-position: top center;
 	}
 }
 .letter:before,
