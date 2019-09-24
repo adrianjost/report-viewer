@@ -53,7 +53,8 @@ export default {
 	methods: {
 		...mapActions("reports", ["fetchBranches", "fetchPulls"]),
 		removeRepoToken(token) {
-			console.log("remove token", token);
+			// TODO
+			// console.log("remove token", token);
 		},
 	},
 };
