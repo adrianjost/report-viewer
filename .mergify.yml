@@ -5,7 +5,6 @@ pull_request_rules:
       - label~=greenkeeper
       - status-success~=Travis CI
       - status-success~=WIP
-      - status-success~=netlify/relaxed-poincare-913bee/deploy-preview
     actions:
       merge:
         method: squash
@@ -16,7 +15,6 @@ pull_request_rules:
       - label~=dependencies
       - status-success~=Travis CI
       - status-success~=WIP
-      - status-success~=netlify/relaxed-poincare-913bee/deploy-preview
     actions:
       merge:
         method: squash
