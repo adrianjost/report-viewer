@@ -43,7 +43,7 @@
 	"dependencies": {
 		"@babel/polyfill": "^7.4.4",
 		"command-line-args": "^5.1.1",
-		"core-js": "^3.2.1",
+		"core-js": "^3.4.8",
 		"glob": "^7.1.4",
 		"request": "^2.88.0"
 	}
