@@ -32,7 +32,7 @@
 		"url": "https://github.com/adrianjost/report-viewer/issues"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.5.4",
+		"@babel/core": "^7.9.0",
 		"@babel/preset-env": "^7.5.4",
 		"parcel-bundler": "^1.12.3",
 		"parcel-plugin-shebang": "^1.2.7"
